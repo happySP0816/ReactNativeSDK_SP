@@ -135,7 +135,7 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'idenfySdk:com.idenfy.idenfySdk:3.2.0'
+  implementation 'idenfySdk:com.idenfy.idenfySdk:3.2.1'
   implementation 'idenfySdk:com.idenfy.idenfySdk.idenfyliveness:3.2.0'
 
 }

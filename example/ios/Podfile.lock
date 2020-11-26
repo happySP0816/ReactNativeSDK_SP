@@ -21,17 +21,17 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - idenfy-react-native-sdk (0.1.3):
-    - iDenfySDK/iDenfyLiveness
+  - idenfy-react-native-sdk (1.1.0):
+    - iDenfySDK/iDenfyLiveness (= 4.3.1)
     - React
-  - iDenfySDK/iDenfyLiveness (4.3.0):
+  - iDenfySDK/iDenfyLiveness (4.3.1):
     - JGProgressHUD
     - lottie-ios
     - MaterialComponents/ActivityIndicator
     - Pulsator
     - ZIPFoundation (~> 0.9)
   - JGProgressHUD (2.2)
-  - lottie-ios (3.1.8)
+  - lottie-ios (3.1.9)
   - MaterialComponents/ActivityIndicator (112.1.0):
     - MaterialComponents/Palettes
     - MaterialComponents/private/Application
@@ -378,10 +378,10 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 5465d51ccfeecb7faa12f9ae0024f2044ce4044e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  idenfy-react-native-sdk: a1844fe81f765497b9290d2b9b7b1da6bb3905e4
-  iDenfySDK: 5efffa54158893b53ee8ef13f1d685c0687d9971
+  idenfy-react-native-sdk: ac871a64318d4732e63fd145bd701f8da4d8b616
+  iDenfySDK: f53ac2bebc2da0d28e738ca47cefc7a372604362
   JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
-  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
   MaterialComponents: ba54523b921faa5c2adaaa692048c6b95a09263d
   MDFInternationalization: 010097556d6b09d2c4ea38e0820ea6d37be6a314
   MotionAnimator: ee16aa30567c5bae0fb2750c132915829cfaaf8a
