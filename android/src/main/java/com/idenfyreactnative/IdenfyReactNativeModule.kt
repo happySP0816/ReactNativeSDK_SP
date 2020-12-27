@@ -48,7 +48,7 @@ class IdenfyReactNativeModule(reactContext: ReactApplicationContext) : ReactCont
                     .withAuthToken(authToken)
                     .build()
 
-            IdenfyController.getInstance().startWithManualResults(currentActivity,
+            IdenfyController.getInstance().initializeIdenfySDKV2WithManual(currentActivity,
                     IdenfyController.IDENFY_REQUEST_CODE,
                     idenfySettingsV2)
         }

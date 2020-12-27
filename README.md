@@ -27,7 +27,7 @@ Minimum required versions by the platform:
 
 **IOS - 9.00**
 
-**Android - API 18**
+**Android - API 19**
 
 If you are starting a new React Native project you can follow [environment setup guide](https://reactnative.dev/docs/environment-setup).
 Once the setup completed successfully, you can initialize a new project with CLI:
@@ -175,7 +175,7 @@ Result will have a following JSON structure:
 }
 ```
 
-Information about the **autoIdentificationStatus** status:
+Information about the IdenfyIdentificationResult **autoIdentificationStatus** statuses:
 
 |Name            |Description
 |-------------------|------------------------------------
@@ -183,15 +183,18 @@ Information about the **autoIdentificationStatus** status:
 |`FAILED`|The user completed an identification flow and the identification status, provided by an automated platform, is FAILED.
 |`UNVERIFIED`   |The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED. 
 
-Information about the **manualIdentificationStatus** status:
+Information about the IdenfyIdentificationResult **manualIdentificationStatus** statuses:
 
 |Name            |Description
 |-------------------|------------------------------------
-|`APPROVED`   |The user completed an identification flow, was verified manually and the identification status, provided by a manual reviewer, is APPROVED.
-|`FAILED`|The user completed an identification flow, was verified manually and the identification status, provided by a manual reviewer, is FAILED.
-|`INACTIVE`   |The user was only verified by an automated platform, not by a manual reviewer.
+|`APPROVED`   |The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is APPROVED.
+|`FAILED`|The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is FAILED.
+|`WAITING`|The user completed an identification flow and started waiting for the manual verification results in the iDenfy SDK. Then he/she decided to stop waiting and pressed a "BACK TO ACCOUNT" button. The manual identification review is **still ongoing**.
+|`INACTIVE`   |The user was only verified by an automated platform, not by a manual reviewer. The identification performed by the user can still be verified by the manual review if your system uses the manual verification service.
 
-All additional information retrieval and webhook callback can be found in [iDenfy documentation](https://github.com/idenfy/Documentation#integration-steps).
+*Note
+The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
+For better customization we suggest using the [immediate redirect feature ](#customizing-results-callbacks-v2-optional). As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
 
 ## Additional customization
 Currently, @idenfy/react-native-sdk plugin does not provide customization options via React Native code directly. For any additional SDK customization you should edit native code inside of the plugin.

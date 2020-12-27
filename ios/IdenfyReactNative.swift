@@ -3,7 +3,7 @@ import iDenfySDK
 
 @objc(IdenfyReactNative)
 class IdenfyReactNative: NSObject {
-    
+
     @objc func start(_ config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
                      rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -22,7 +22,7 @@ class IdenfyReactNative: NSObject {
                 .build()
 
             let idenfyController = IdenfyController.shared
-            idenfyController.initializeIdenfySDKWithManualResults(idenfySettingsV2: idenfySettingsV2)
+            idenfyController.initializeIdenfySDKV2WithManual(idenfySettingsV2: idenfySettingsV2)
 
             let idenfyVC = idenfyController.instantiateNavigationController()
 

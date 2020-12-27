@@ -32,7 +32,7 @@ android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   buildToolsVersion getExtOrDefault('buildToolsVersion')
   defaultConfig {
-    minSdkVersion 18
+    minSdkVersion 19
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
@@ -135,7 +135,7 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'idenfySdk:com.idenfy.idenfySdk:3.2.1'
-  implementation 'idenfySdk:com.idenfy.idenfySdk.idenfyliveness:3.2.0'
+  implementation 'idenfySdk:com.idenfy.idenfySdk:4.0.0'
+  implementation 'idenfySdk:com.idenfy.idenfySdk.idenfyliveness:4.0.0'
 
 }
