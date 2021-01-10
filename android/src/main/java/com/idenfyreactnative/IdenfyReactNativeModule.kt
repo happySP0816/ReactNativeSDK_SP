@@ -1,12 +1,8 @@
 package com.idenfyreactnative
 
-import android.app.Activity
 import com.facebook.react.bridge.*
 import com.idenfy.idenfySdk.CoreSdkInitialization.IdenfyController
 import com.idenfy.idenfySdk.api.initialization.IdenfySettingsV2.IdenfyBuilderV2
-import com.idenfy.idenfySdk.api.logging.IdenfySDKLoggingSettings.IdenfySDKLoggingEnum
-import com.idenfy.idenfySdk.api.ui.IdenfyUISettingsV2.IdenfyUIBuilderV2
-import com.idenfyreactnative.data.IdenfyReactNativeCallbacksStoreImpl
 import com.idenfyreactnative.di.DIProvider
 import com.idenfyreactnative.domain.IdenfyReactNativeCallbacksUseCase
 import com.idenfyreactnative.domain.IdenfySdkActivityEventListener

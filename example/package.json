@@ -9,7 +9,6 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "@idenfy/react-native-sdk": "^1.2.0",
     "buffer": "^6.0.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
