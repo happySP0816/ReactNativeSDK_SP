@@ -19,5 +19,5 @@ Pod::Spec.new do |s|
 
 
   s.dependency "React"
-  s.dependency "iDenfySDK/iDenfyLiveness", "6.2.0"
+  s.dependency "iDenfySDK/iDenfyLiveness", "6.2.3"
 end
