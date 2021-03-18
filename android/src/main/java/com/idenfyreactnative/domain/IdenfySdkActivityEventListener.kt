@@ -16,7 +16,7 @@ import java.lang.Exception
 internal class IdenfySdkActivityEventListener(private val idenfyReactNativeCallbacksUseCase: IdenfyReactNativeCallbacksUseCase,
                                      private val nativeResponseToReactNativeResponseMapper: NativeResponseToReactNativeResponseMapper) : BaseActivityEventListener() {
 
-    override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val callbackReceiver = idenfyReactNativeCallbacksUseCase.getCallbackReceiver() ?: return
 
@@ -24,7 +24,7 @@ internal class IdenfySdkActivityEventListener(private val idenfyReactNativeCallb
 
             if (resultCode == IdenfyController.IDENFY_IDENTIFICATION_RESULT_CODE) {
                 try {
-                    val idenfyIdentificationResult: IdenfyIdentificationResult? = data.getParcelableExtra(IdenfyController.IDENFY_IDENTIFICATION_RESULT)
+                    val idenfyIdentificationResult: IdenfyIdentificationResult? = data?.getParcelableExtra(IdenfyController.IDENFY_IDENTIFICATION_RESULT)
                     if(idenfyIdentificationResult==null){
                         callbackReceiver.reject("error", Exception("Data is null"))
                         idenfyReactNativeCallbacksUseCase.resetPromise()
