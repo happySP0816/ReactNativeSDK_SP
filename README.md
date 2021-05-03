@@ -52,9 +52,7 @@ Add the maven link `android/build.gradle`:
 ```gradle
 allprojects {
   repositories {
-    maven {
-      url  "https://dl.bintray.com/idenfy/idenfy"
-    }
+    maven { url 'https://jitpack.io' }
   }
 }
 ```
