@@ -38,7 +38,7 @@ $ npx react-native init AwesomeProject
 
 #### 2.2 Adding SDK dependency through npm
 
-Navigate to the root directory of your React Native project. The rest of this second section will assume you are in the root directory. 
+Navigate to the root directory of your React Native project. The rest of this second section will assume you are in the root directory.
 Run the following command:
 
 ```shell
@@ -73,6 +73,21 @@ android {
 <string>Required for document and facial capture</string>
 ```
 
+Add the following lines to the Podfile of your project:
+
+```ruby
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+          target.build_configurations.each do |config|
+            config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+        end
+      end
+    end
+end
+```
+The Podfile **should look like** the one in the /example/ios/Podfile
+
 Install the pods:
 ```bash
 cd ios
@@ -90,85 +105,85 @@ Once you have an authentication token, which can be retried with following code,
 
 ```typescript jsx
 getAuthToken = () => {
-    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
-    return fetch(BASE_URL + 'api/v2/token', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + encodedAuth,
-      },
-      body: JSON.stringify({
-        clientId: clientId,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((json) => this.startSDK(json.authToken));
-        } else {
-          response.json().then((json) => {
-            console.log(json);
-            this.setState({
-              message:
-                'Error getting authToken, status code is: ' +
-                response.status.toString() +
-                '\n \n Response: ' +
-                JSON.stringify(json),
-              sdkFlowComplete: true,
-            });
+  let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+  return fetch(BASE_URL + 'api/v2/token', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + encodedAuth,
+    },
+    body: JSON.stringify({
+      clientId: clientId,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        response.json().then((json) => this.startSDK(json.authToken));
+      } else {
+        response.json().then((json) => {
+          console.log(json);
+          this.setState({
+            message:
+              'Error getting authToken, status code is: ' +
+              response.status.toString() +
+              '\n \n Response: ' +
+              JSON.stringify(json),
+            sdkFlowComplete: true,
           });
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          message: error.message,
-          sdkFlowComplete: true,
         });
-        console.error(error);
+      }
+    })
+    .catch((error) => {
+      this.setState({
+        message: error.message,
+        sdkFlowComplete: true,
       });
-  };
+      console.error(error);
+    });
+};
 ```
 Calling IdenfyReactNative.start with provided authToken:
 
 
 ```typescript jsx
  startSDK = (authToken: String) => {
-    IdenfyReactNative.start({
-      authToken: authToken,
-    })
-      .then((response) => {
-        this.setState({
-          message: JSON.stringify(response),
-          sdkFlowComplete: true,
-        });
-      })
-      .catch((error) => {
-        this.setState({
-          message: error.code + ': ' + error.message,
-          sdkFlowComplete: true,
-        });
+  IdenfyReactNative.start({
+    authToken: authToken,
+  })
+    .then((response) => {
+      this.setState({
+        message: JSON.stringify(response),
+        sdkFlowComplete: true,
       });
-  };
+    })
+    .catch((error) => {
+      this.setState({
+        message: error.code + ': ' + error.message,
+        sdkFlowComplete: true,
+      });
+    });
+};
 ```
 ## Callbacks
 
 Callback from the SDK can be retrieved from IdenfyReactNative.start promise:
 ````typescript jsx
 IdenfyReactNative.start({
-      authToken: authToken,
-    })
-      .then((response) => {
-        this.setState({
-          message: JSON.stringify(response),
-          sdkFlowComplete: true,
-        });
-      })
+  authToken: authToken,
+})
+  .then((response) => {
+    this.setState({
+      message: JSON.stringify(response),
+      sdkFlowComplete: true,
+    });
+  })
 ````
 Result will have a following JSON structure:
 
 ```javascript
 {
-    "autoIdentificationStatus": "APPROVED",
+  "autoIdentificationStatus": "APPROVED",
     "manualIdentificationStatus": "APPROVED"
 }
 ```
@@ -179,7 +194,7 @@ Information about the IdenfyIdentificationResult **autoIdentificationStatus** st
 |-------------------|------------------------------------
 |`APPROVED`   |The user completed an identification flow and the identification status, provided by an automated platform, is APPROVED.
 |`FAILED`|The user completed an identification flow and the identification status, provided by an automated platform, is FAILED.
-|`UNVERIFIED`   |The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED. 
+|`UNVERIFIED`   |The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED.
 
 Information about the IdenfyIdentificationResult **manualIdentificationStatus** statuses:
 

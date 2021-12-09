@@ -9,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.2.1'
+    classpath 'com.android.tools.build:gradle:4.2.2'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -30,12 +30,19 @@ android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   buildToolsVersion getExtOrDefault('buildToolsVersion')
   defaultConfig {
+    multiDexEnabled true
     minSdkVersion 19
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
 
   }
+
+   packagingOptions {
+          exclude "META-INF/licenses/**"
+          exclude 'org/bouncycastle/x509/CertPathReviewerMessages.properties'
+          exclude 'org/bouncycastle/x509/CertPathReviewerMessages_de.properties'
+   }
 
   buildTypes {
     release {
@@ -129,8 +136,9 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
   // noinspection GradleDynamicVersion
+  implementation 'androidx.multidex:multidex:2.0.1'
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.github.idenfy:sdk-api:5.1.1'
+  implementation 'com.github.idenfy:sdk-api:5.4.1'
 
 }
