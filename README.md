@@ -88,10 +88,57 @@ end
 ```
 The Podfile **should look like** the one in the /example/ios/Podfile
 
-Install the pods:
+The main idea is to have **use_frameworks!** and **disabled Flipper** in the target Pod settings. It is required, because we use [dynamic (newer) Frameworks](https://stackoverflow.com/a/49469205/9163128) instead of static ones.
+
+Take a look at a fresh projects' Podfile:
+```ruby
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '11.0'
+
+target 'demo-idenfy' do
+  config = use_native_modules!
+  use_frameworks!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
+  target 'demo-idenfyTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+  #use_flipper!()
+
+  post_install do |installer|
+   installer.pods_project.targets.each do |target|
+          if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+            target.build_configurations.each do |config|
+              config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+          end
+        end
+      end
+    react_native_post_install(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  end
+end
+
+```
+
+
+Install the pods (run **pod update** as well):
 ```bash
 cd ios
 pod install
+pod update
 cd ..
 ```
 
