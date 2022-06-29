@@ -256,6 +256,86 @@ Information about the IdenfyIdentificationResult **manualIdentificationStatus** 
 The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
 For better customization we suggest using the [immediate redirect feature ](#customizing-results-callbacks-v2-optional). As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
 
+## Face Re-authentication
+To use the newest face re-authentication feature you need to have a **scanRef**. On how to obtain it as well as general information are available in our documentation.
+### 1. Obtaining token
+First step is to obtain the authentication token. Please use this util method
+```typescript jsx
+getAuthTokenForFaceReauth = () => {
+    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+    return fetch(BASE_URL + 'partner/authentication-info', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + encodedAuth,
+      },
+      body: JSON.stringify({
+        scanRef: scanRef,
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.ok) {
+          response.json().then((json) => this.startFaceReAuthSDK(json.token));
+        } else {
+          response.json().then((json) => {
+            console.log(json);
+            this.setState({
+              message:
+                'Error getting authToken, status code is: ' +
+                response.status.toString() +
+                '\n \n Response: ' +
+                JSON.stringify(json),
+              sdkFlowComplete: true,
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          message: error.message,
+          sdkFlowComplete: true,
+        });
+        console.error(error);
+      });
+  };
+```
+### 2. Initializing the SDK
+```typescript jsx
+startFaceReAuthSDK = (authToken: String) => {
+  IdenfyReactNative.startFaceReAuth({
+    authToken: authToken,
+  })
+    .then((response) => {
+      this.setState({
+        message: JSON.stringify(response),
+        sdkFlowComplete: true,
+      });
+    })
+    .catch((error) => {
+      this.setState({
+        message: error.code + ': ' + error.message,
+        sdkFlowComplete: true,
+      });
+    });
+};
+```
+### 3. Receiving results
+After Face re-authentication is completed the SDK closes and returns response using SDK callbacks as well as webhook results.
+
+Callback is returned from **startFaceReAuth** method.
+
+The possible values and their explanations are:
+
+| Name       |Description
+|------------|------------------------------------
+| `SUCCESS`  |The user completed a face reauthentication flow and the reauthentication status, provided by the platform, is SUCCESS.
+| `FAILED`   |The user completed a face reauthentication flow and the reauthentication status, provided by the platform, is FAILED.
+| `EXIT`     |The user did not complete a face reauthentication flow and the reauthentication status, provided by the platform, is EXIT.
+
+## To initialize you can check the utils method in the example project
+
 ## Additional customization
 Currently, @idenfy/react-native-sdk plugin does not provide customization options via React Native code directly. For any additional SDK customization you should edit native code inside of the plugin.
 

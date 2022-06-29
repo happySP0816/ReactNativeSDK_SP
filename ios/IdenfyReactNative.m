@@ -8,6 +8,11 @@ RCT_EXTERN_METHOD(
     resolver:(RCTPromiseResolveBlock)resolve
     rejecter:(RCTPromiseRejectBlock)reject
 )
+RCT_EXTERN_METHOD(
+    startFaceReAuth:(NSDictionary *)config
+    resolver:(RCTPromiseResolveBlock)resolve
+    rejecter:(RCTPromiseRejectBlock)reject
+)
 
 + (BOOL)requiresMainQueueSetup
 {

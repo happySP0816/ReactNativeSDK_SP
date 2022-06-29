@@ -11,6 +11,7 @@ import com.idenfy.idenfySdk.api.response.IdenfyIdentificationResult
 import com.idenfy.idenfySdk.api.response.ManualIdentificationStatus
 import com.idenfyreactnative.domain.mappers.NativeResponseToReactNativeResponseMapper
 import java.lang.Exception
+import com.idenfy.idenfySdk.api.response.*
 
 
 internal class IdenfySdkActivityEventListener(private val idenfyReactNativeCallbacksUseCase: IdenfyReactNativeCallbacksUseCase,
@@ -39,6 +40,19 @@ internal class IdenfySdkActivityEventListener(private val idenfyReactNativeCallb
                     idenfyReactNativeCallbacksUseCase.resetPromise()
                 }
             }
+            else if (resultCode == IdenfyController.IDENFY_FACE_REAUTHENTICATION_RESULT_CODE) {
+                            val faceReauthenticationResult: FaceReauthenticationResult? =
+                                data?.getParcelableExtra(IdenfyController.IDENFY_FACE_REAUTHENTICATION_RESULT)
+                                if(faceReauthenticationResult==null){
+                                callbackReceiver.reject("error", Exception("Data is null"))
+                                idenfyReactNativeCallbacksUseCase.resetPromise()
+                                return
+                                }
+                                val responseMap: WritableMap = nativeResponseToReactNativeResponseMapper.mapFaceReauth(faceReauthenticationResult.faceReauthenticationStatus)
+                                callbackReceiver.resolve(responseMap)
+                                 idenfyReactNativeCallbacksUseCase.resetPromise()
+
+                        }
         }
 
     }

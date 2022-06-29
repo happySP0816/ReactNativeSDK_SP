@@ -12,6 +12,14 @@ class IdenfyReactNative: NSObject {
         }
     }
 
+    @objc func startFaceReAuth(_ config: NSDictionary,
+                         resolver resolve: @escaping RCTPromiseResolveBlock,
+                         rejecter reject: @escaping RCTPromiseRejectBlock) {
+            DispatchQueue.main.async {
+                self.run(withConfig: config, resolver: resolve, rejecter: reject)
+            }
+        }
+
     private func run(withConfig config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
                      rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -49,4 +57,40 @@ class IdenfyReactNative: NSObject {
             resolve(response)
         })
     }
+
+    private func runFaceReauth(withConfig config: NSDictionary,
+                         resolver resolve: @escaping RCTPromiseResolveBlock,
+                         rejecter reject: @escaping RCTPromiseRejectBlock) {
+            do {
+                let authToken = GetSdkConfig.getAuthToken(config: config)
+
+                let idenfyController = IdenfyController.shared
+                let faceReauthenticationInitialization = FaceReauthenticationInitialization(reauthenticationToken: authToken, withImmediateRedirect: false)
+                idenfyController.initializeFaceReauthentication(faceReauthenticationInitialization: faceReauthenticationInitialization)
+
+                let idenfyVC = idenfyController.instantiateNavigationController()
+
+                idenfyVC.modalPresentationStyle = .fullScreen
+
+                UIApplication.shared.windows.first?.rootViewController?.present(idenfyVC, animated: true)
+
+                handleFaceReauthSdkCallbacks(idenfyController: idenfyController, resolver: resolve)
+
+            } catch let error as NSError {
+                reject("error", error.domain, error)
+                return
+            } catch {
+                reject("error", "Unexpected error. Verify that config is structured correctly.", error)
+                return
+            }
+        }
+
+        private func handleFaceReauthSdkCallbacks(idenfyController: IdenfyController, resolver resolve: @escaping RCTPromiseResolveBlock) {
+                idenfyController.handleIdenfyCallbacksForFaceReauthentication(faceReauthenticationResult: {
+                    faceReauthenticationResult
+                        in
+                    let response = NativeResponseToReactNativeResponseMapper.mapFaceReauth(o: faceReauthenticationResult)
+                    resolve(response)
+                })
+            }
 }

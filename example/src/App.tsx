@@ -3,7 +3,7 @@ import IdenfyReactNative from '@idenfy/react-native-sdk';
 import React, { Component } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { Buffer } from 'buffer';
-import { apiKey, apiSecret, BASE_URL, clientId } from './Consts';
+import { apiKey, apiSecret, BASE_URL, clientId, scanRef } from './Consts';
 global.Buffer = Buffer; // very important
 export default class App extends Component {
   state = {
@@ -13,6 +13,63 @@ export default class App extends Component {
     message: '--',
     sdkToken: '',
     sdkFlowComplete: false,
+  };
+
+  getAuthTokenForFaceReauth = () => {
+    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+    return fetch(BASE_URL + 'partner/authentication-info', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + encodedAuth,
+      },
+      body: JSON.stringify({
+        scanRef: scanRef,
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.ok) {
+          response.json().then((json) => this.startFaceReAuthSDK(json.token));
+        } else {
+          response.json().then((json) => {
+            console.log(json);
+            this.setState({
+              message:
+                'Error getting authToken, status code is: ' +
+                response.status.toString() +
+                '\n \n Response: ' +
+                JSON.stringify(json),
+              sdkFlowComplete: true,
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          message: error.message,
+          sdkFlowComplete: true,
+        });
+        console.error(error);
+      });
+  };
+  startFaceReAuthSDK = (authToken: String) => {
+    IdenfyReactNative.startFaceReAuth({
+      authToken: authToken,
+    })
+      .then((response) => {
+        this.setState({
+          message: JSON.stringify(response),
+          sdkFlowComplete: true,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          message: error.code + ': ' + error.message,
+          sdkFlowComplete: true,
+        });
+      });
   };
 
   getAuthToken = () => {
