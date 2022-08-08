@@ -14,9 +14,10 @@ internal class NativeResponseToReactNativeResponseMapper {
         return map
     }
 
-    fun mapFaceReauth(o: FaceReauthenticationStatus): WritableMap {
+    fun mapFaceReauth(o: FaceAuthenticationStatus): WritableMap {
             val map = Arguments.createMap()
             map.putString("faceReauthenticationStatus", o.status)
+            map.putString("faceAuthenticationStatus", o.status)
             return map
         }
 }

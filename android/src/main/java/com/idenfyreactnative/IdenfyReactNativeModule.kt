@@ -7,7 +7,8 @@ import com.idenfyreactnative.di.DIProvider
 import com.idenfyreactnative.domain.IdenfyReactNativeCallbacksUseCase
 import com.idenfyreactnative.domain.IdenfySdkActivityEventListener
 import com.idenfyreactnative.domain.utils.GetSdkDataFromConfig
-import com.idenfy.idenfySdk.facereauthentication.api.FaceReauthenticationInitialization
+import com.idenfy.idenfySdk.faceauthentication.api.FaceAuthenticationInitialization
+import com.idenfy.idenfySdk.faceauthentication.domain.models.FaceAuthenticationType
 
 class IdenfyReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     private val diProvider = DIProvider()
@@ -74,8 +75,8 @@ class IdenfyReactNativeModule(reactContext: ReactApplicationContext) : ReactCont
             try {
 
                 val authToken = GetSdkDataFromConfig.getSdkTokenFromConfig(config)
-                val faceReauthenticationInitialization = FaceReauthenticationInitialization(authToken, false)
-                IdenfyController.getInstance().initializeFaceReauthenticationSDKV2(currentActivity,   IdenfyController.IDENFY_REQUEST_CODE, faceReauthenticationInitialization)
+                val faceReauthenticationInitialization = FaceAuthenticationInitialization(authToken, false)
+                IdenfyController.getInstance().initializeFaceAuthenticationSDKV2(currentActivity,   IdenfyController.IDENFY_REQUEST_CODE, faceReauthenticationInitialization)
             }
 
             //Unexpected exceptions

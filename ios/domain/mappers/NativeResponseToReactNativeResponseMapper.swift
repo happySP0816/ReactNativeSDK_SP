@@ -17,9 +17,10 @@ struct NativeResponseToReactNativeResponseMapper {
         return response
     }
 
-    static func mapFaceReauth(o: FaceReauthenticationResult) -> RNResponse {
+    static func mapFaceReauth(o: FaceAuthenticationResult) -> RNResponse {
             var response = RNResponse()
-            response["faceReauthenticationStatus"] = o.faceReauthenticationStatus.rawValue
+            response["faceReauthenticationStatus"] = o.faceAuthenticationStatus.rawValue
+            response["faceAuthenticationStatus"] = o.faceAuthenticationStatus.rawValue
             return response
         }
 }

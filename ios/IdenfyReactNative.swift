@@ -65,8 +65,8 @@ class IdenfyReactNative: NSObject {
                 let authToken = GetSdkConfig.getAuthToken(config: config)
 
                 let idenfyController = IdenfyController.shared
-                let faceReauthenticationInitialization = FaceReauthenticationInitialization(reauthenticationToken: authToken, withImmediateRedirect: false)
-                idenfyController.initializeFaceReauthentication(faceReauthenticationInitialization: faceReauthenticationInitialization)
+                let faceReauthenticationInitialization = FaceAuthenticationInitialization(authenticationToken: authToken, withImmediateRedirect: false)
+                idenfyController.initializeFaceAuthentication(faceAuthenticationInitialization: faceReauthenticationInitialization)
 
                 let idenfyVC = idenfyController.instantiateNavigationController()
 
@@ -86,7 +86,7 @@ class IdenfyReactNative: NSObject {
         }
 
         private func handleFaceReauthSdkCallbacks(idenfyController: IdenfyController, resolver resolve: @escaping RCTPromiseResolveBlock) {
-                idenfyController.handleIdenfyCallbacksForFaceReauthentication(faceReauthenticationResult: {
+                idenfyController.handleIdenfyCallbacksForFaceAuthentication(faceReauthenticationResult: {
                     faceReauthenticationResult
                         in
                     let response = NativeResponseToReactNativeResponseMapper.mapFaceReauth(o: faceReauthenticationResult)

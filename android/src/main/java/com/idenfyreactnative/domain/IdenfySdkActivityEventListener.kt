@@ -40,15 +40,15 @@ internal class IdenfySdkActivityEventListener(private val idenfyReactNativeCallb
                     idenfyReactNativeCallbacksUseCase.resetPromise()
                 }
             }
-            else if (resultCode == IdenfyController.IDENFY_FACE_REAUTHENTICATION_RESULT_CODE) {
-                            val faceReauthenticationResult: FaceReauthenticationResult? =
-                                data?.getParcelableExtra(IdenfyController.IDENFY_FACE_REAUTHENTICATION_RESULT)
+            else if (resultCode == IdenfyController.IDENFY_FACE_AUTHENTICATION_RESULT_CODE) {
+                            val faceReauthenticationResult: FaceAuthenticationResult? =
+                                data?.getParcelableExtra(IdenfyController.IDENFY_FACE_AUTHENTICATION_RESULT)
                                 if(faceReauthenticationResult==null){
                                 callbackReceiver.reject("error", Exception("Data is null"))
                                 idenfyReactNativeCallbacksUseCase.resetPromise()
                                 return
                                 }
-                                val responseMap: WritableMap = nativeResponseToReactNativeResponseMapper.mapFaceReauth(faceReauthenticationResult.faceReauthenticationStatus)
+                                val responseMap: WritableMap = nativeResponseToReactNativeResponseMapper.mapFaceReauth(faceReauthenticationResult.faceAuthenticationStatus)
                                 callbackReceiver.resolve(responseMap)
                                  idenfyReactNativeCallbacksUseCase.resetPromise()
 
