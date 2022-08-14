@@ -16,7 +16,7 @@ class IdenfyReactNative: NSObject {
                          resolver resolve: @escaping RCTPromiseResolveBlock,
                          rejecter reject: @escaping RCTPromiseRejectBlock) {
             DispatchQueue.main.async {
-                self.run(withConfig: config, resolver: resolve, rejecter: reject)
+                self.runFaceReauth(withConfig: config, resolver: resolve, rejecter: reject)
             }
         }
 
@@ -86,10 +86,10 @@ class IdenfyReactNative: NSObject {
         }
 
         private func handleFaceReauthSdkCallbacks(idenfyController: IdenfyController, resolver resolve: @escaping RCTPromiseResolveBlock) {
-                idenfyController.handleIdenfyCallbacksForFaceAuthentication(faceReauthenticationResult: {
-                    faceReauthenticationResult
+            idenfyController.handleIdenfyCallbacksForFaceAuthentication(faceAuthenticationResult: {
+                faceAuthenticationResult
                         in
-                    let response = NativeResponseToReactNativeResponseMapper.mapFaceReauth(o: faceReauthenticationResult)
+                    let response = NativeResponseToReactNativeResponseMapper.mapFaceReauth(o: faceAuthenticationResult)
                     resolve(response)
                 })
             }
