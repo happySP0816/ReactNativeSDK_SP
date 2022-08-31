@@ -262,44 +262,44 @@ To use the newest face re-authentication feature you need to have a **scanRef**.
 First step is to obtain the authentication token. Please use this util method
 ```typescript jsx
 getAuthTokenForFaceReauth = () => {
-    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
-    return fetch(BASE_URL + 'partner/authentication-info', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + encodedAuth,
-      },
-      body: JSON.stringify({
-        scanRef: scanRef,
-      }),
-    })
-      .then((response) => {
-        console.log(response);
-        if (response.ok) {
-          response.json().then((json) => this.startFaceReAuthSDK(json.token));
-        } else {
-          response.json().then((json) => {
-            console.log(json);
-            this.setState({
-              message:
-                'Error getting authToken, status code is: ' +
-                response.status.toString() +
-                '\n \n Response: ' +
-                JSON.stringify(json),
-              sdkFlowComplete: true,
-            });
+  let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+  return fetch(BASE_URL + 'partner/authentication-info', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + encodedAuth,
+    },
+    body: JSON.stringify({
+      scanRef: scanRef,
+    }),
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.ok) {
+        response.json().then((json) => this.startFaceReAuthSDK(json.token));
+      } else {
+        response.json().then((json) => {
+          console.log(json);
+          this.setState({
+            message:
+              'Error getting authToken, status code is: ' +
+              response.status.toString() +
+              '\n \n Response: ' +
+              JSON.stringify(json),
+            sdkFlowComplete: true,
           });
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          message: error.message,
-          sdkFlowComplete: true,
         });
-        console.error(error);
+      }
+    })
+    .catch((error) => {
+      this.setState({
+        message: error.message,
+        sdkFlowComplete: true,
       });
-  };
+      console.error(error);
+    });
+};
 ```
 ### 2. Initializing the SDK
 ```typescript jsx
@@ -344,6 +344,68 @@ Follow [Android native SDK](https://github.com/idenfy/Documentation/blob/master/
 
 **IOS customization:**
 Follow [IOS native SDK guide](https://github.com/idenfy/Documentation/blob/master/pages/ios-sdk.md#customizing-sdk-v2-optional) and edit **IdenfyReactNative.swift**.
+
+A detailed guide on how to provide complex customization:
+
+### 1. Fork this repository
+First, fork this repository because you will reference it directly via Github in your package.json.
+
+
+### 2. Apply customization where needed
+
+Most of the native customization for IOS are done via code changes. For Android, it is not needed most of the time.
+
+Take a look at the IOS changes in [this file](https://github.com/idenfy/ReactNativeSDK/blob/ui-customization-v1/ios/IdenfyReactNative.swift) in the SDK with custom UI:
+```Swift
+let idenfyColorMain = "#EA9619"
+let idenfyColorButton = "#6539AC"
+
+IdenfyCommonColors.idenfyMainColorV2 = UIColor(hexString: idenfyColorMain)
+IdenfyCommonColors.idenfyMainDarkerColorV2 = UIColor(hexString: idenfyColorMain)
+IdenfyCommonColors.idenfyGradientColor1V2 = UIColor(hexString: idenfyColorButton)
+IdenfyCommonColors.idenfyGradientColor2V2 = UIColor(hexString: idenfyColorButton)
+            
+IdenfyToolbarUISettingsV2.idenfyDefaultToolbarBackgroundColor = UIColor(hexString: idenfyColorMain)
+            
+IdenfyToolbarUISettingsV2.idenfyDefaultToolbarBackIconTintColor = IdenfyCommonColors.idenfyBlack
+IdenfyToolbarUISettingsV2.idenfyDefaultToolbarLogoIconTintColor = IdenfyCommonColors.idenfyBlack
+            
+IdenfyToolbarUISettingsV2.idenfyLanguageSelectionToolbarLanguageSelectionIconTintColor  = IdenfyCommonColors.idenfyBlack
+IdenfyToolbarUISettingsV2.idenfyLanguageSelectionToolbarCloseIconTintColor = IdenfyCommonColors.idenfyBlack
+            
+IdenfyCommonColors.idenfyPhotoResultDetailsCardBackgroundColorV2 = UIColor(hexString: "#FFE5BD")
+IdenfyPhotoResultViewUISettingsV2.idenfyPhotoResultViewDetailsCardTitleColor = UIColor(hexString: idenfyColorButton)
+            
+let idenfyViewsV2:IdenfyViewsV2 = IdenfyViewsBuilderV2()
+    .withCountryCellView(CountryCell.self)
+    .build()
+                    
+            
+let idenfyController = IdenfyController.shared
+idenfyController.initializeIdenfySDKV2WithManual(idenfySettingsV2: idenfySettingsV2, idenfyViewsV2: idenfyViewsV2)
+```
+
+### 3. Push changes & include the library
+
+You should add the package with npm and by defining your repository in the source, like this:
+
+```shell
+npm install --save  https://github.com/idenfy/ReactNativeSDK/#ui-customization-v1
+```
+
+### 4. Apply remaining customization directly in your react native project.
+
+For Android you need to include the modified resources files (colors, layout changes, images). You do so by dragging all resource files to the **android folder**.
+
+![Alt text](android-custom.png)
+
+For IOS you need to include the modified resources files (only images, since colors, are changed in 2 step). You do so by dragging all resource files to the **ios folder**.
+
+![Alt text](ios-custom.png)
+
+### 5. Compile everything, and you are good to go!
+
+Changes will be present, and it will be easy to keep up with the SDK changes, by using Git fork.
 
 ## SDK Integration tutorials
 For more information visit [SDK integration tutorials](https://github.com/idenfy/Documentation/blob/master/pages/tutorials/mobile-sdk-tutorials.md).
