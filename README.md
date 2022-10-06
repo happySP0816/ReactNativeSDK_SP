@@ -412,6 +412,9 @@ After dragging don't forget to link the folder in the project settings, see atta
 
 Changes will be present, and it will be easy to keep up with the SDK changes, by using Git fork.
 
+### 6. Check IOS example
+**If needed check the customization example with all folders in a right structure. Here is a [project](IdenfyCustomizationExample.zip)**.
+
 ## SDK Integration tutorials
 For more information visit [SDK integration tutorials](https://github.com/idenfy/Documentation/blob/master/pages/tutorials/mobile-sdk-tutorials.md).
 
