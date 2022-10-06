@@ -399,9 +399,14 @@ For Android you need to include the modified resources files (colors, layout cha
 
 ![Alt text](android-custom.png)
 
-For IOS you need to include the modified resources files (only images, since colors, are changed in 2 step). You do so by dragging all resource files to the **ios folder**.
+For IOS you need to include the modified resources files (only images, since colors, are changed in 2 step). You do so by dragging IdenfyAssets.xcassets to the **ios folder**.
 
 ![Alt text](ios-custom.png)
+
+After dragging don't forget to link the folder in the project settings, see attached images belows.
+
+![Alt text](ios-folder.png)
+![Alt text](ios-linking.png)
 
 ### 5. Compile everything, and you are good to go!
 

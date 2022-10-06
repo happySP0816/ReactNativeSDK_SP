@@ -12,7 +12,8 @@
     "buffer": "^6.0.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-linear-gradient": "^2.5.6"
+    "react-native-linear-gradient": "^2.5.6",
+    "@idenfy/react-native-sdk": "github:idenfy/ReactNativeSDK#ui-customization-v1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

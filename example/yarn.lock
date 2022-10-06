@@ -770,6 +770,12 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@idenfy/react-native-sdk@github:idenfy/ReactNativeSDK#ui-customization-v1":
+  "resolved" "git+ssh://git@github.com/idenfy/ReactNativeSDK.git#d438db42a170124eed3aa8f8b337fbd0a2754ebe"
+  "version" "1.9.2"
+  dependencies:
+    "android" "^0.0.8"
+
 "@jest/console@^24.9.0":
   "integrity" "sha512-Zuj6b8TnKXi3q4ymac8EQfc3ea/uhLeCGThFqXeC8H9/raaH8ARPUTdId+XyGd03Z4In0/VjD2OYFcBF09fNLQ=="
   "resolved" "https://registry.npmjs.org/@jest/console/-/console-24.9.0.tgz"
@@ -1007,6 +1013,11 @@
   dependencies:
     "mime-types" "~2.1.24"
     "negotiator" "0.6.2"
+
+"android@^0.0.8":
+  "integrity" "sha512-cMasrXpHR6APDMSTu5JNMTL37GjYbcC9Uz2cyExSnr0f6XanNhPW3+iavHqRmfNW0QlM4kjZQa2epTjpyZcdjQ=="
+  "resolved" "https://registry.npmjs.org/android/-/android-0.0.8.tgz"
+  "version" "0.0.8"
 
 "anser@^1.4.9":
   "integrity" "sha512-hCv9AqTQ8ycjpSd3upOJd7vFwW1JaoYQ7tpham03GJ1ca8/65rqn0RpaWpItOAd6ylW9wAw6luXYPJIyPFVOww=="
@@ -3539,7 +3550,7 @@
   "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz"
   "version" "2.5.6"
 
-"react-native@>=0.55", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@0.62.2":
+"react-native@*", "react-native@>=0.55", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@0.62.2":
   "integrity" "sha512-gADZZ3jcm2WFTjh8CCBCbl5wRSbdxqZGd+8UpNwLQFgrkp/uHorwAhLNqcd4+fHmADgPBltNL0uR1Vhv47zcOw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.62.2.tgz"
   "version" "0.62.2"
@@ -3581,7 +3592,7 @@
   "resolved" "https://registry.npmjs.org/react-refresh/-/react-refresh-0.4.3.tgz"
   "version" "0.4.3"
 
-"react@^17.0.0", "react@16.11.0":
+"react@*", "react@^17.0.0", "react@16.11.0":
   "integrity" "sha512-M5Y8yITaLmU0ynd0r1Yvfq98Rmll6q8AxaEe88c8e7LxO8fZ2cNgmFt0aGAS9wzf1Ao32NKXtCl+/tVVtkxq6g=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.11.0.tgz"
   "version" "16.11.0"
