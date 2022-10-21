@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import IdenfyReactNative from '@idenfy/react-native-sdk';
+import { start, startFaceReAuth } from 'idenfy-react-native';
 import React, { Component } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { Buffer } from 'buffer';
@@ -55,7 +55,7 @@ export default class App extends Component {
       });
   };
   startFaceReAuthSDK = (authToken: String) => {
-    IdenfyReactNative.startFaceReAuth({
+    startFaceReAuth({
       authToken: authToken,
     })
       .then((response) => {
@@ -87,7 +87,9 @@ export default class App extends Component {
     })
       .then((response) => {
         if (response.ok) {
-          response.json().then((json) => this.startSDK(json.authToken));
+          response.json().then((json) => {
+            this.startSDK(json.authToken);
+          });
         } else {
           response.json().then((json) => {
             console.log(json);
@@ -111,7 +113,7 @@ export default class App extends Component {
       });
   };
   startSDK = (authToken: String) => {
-    IdenfyReactNative.start({
+    start({
       authToken: authToken,
     })
       .then((response) => {

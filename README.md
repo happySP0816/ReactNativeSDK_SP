@@ -1,11 +1,11 @@
 ## Table of contents
 - [Getting started](#getting-started)
-    - [1. Obtaining an authentication token](#1-obtaining-an-authentication-token)
-    - [2. Adding Idenfy React Native SDK](#2-adding-idenfy-react-native-sdk)
-        - [2.1 Availability information & new project setup](#21-availability-information--new-project-setup)
-        - [2.2 Adding SDK dependency through npm](#22-adding-sdk-dependency-through-npm)
-        - [2.3 Configure Android project](#23-configure-android-project)
-        - [2.4 Configure IOS project](#24-configure-ios-project)
+  - [1. Obtaining an authentication token](#1-obtaining-an-authentication-token)
+  - [2. Adding Idenfy React Native SDK](#2-adding-idenfy-react-native-sdk)
+    - [2.1 Availability information & new project setup](#21-availability-information--new-project-setup)
+    - [2.2 Adding SDK dependency through npm](#22-adding-sdk-dependency-through-npm)
+    - [2.3 Configure Android project](#23-configure-android-project)
+    - [2.4 Configure IOS project](#24-configure-ios-project)
 *   [Usage](#usage)
 *   [Callbacks](#callbacks)
 *   [Additional customization](#additional-customization)
@@ -23,17 +23,22 @@ The SDK requires token for starting initialization. [Token generation guide](htt
 #### 2.1 Availability information & new project setup
 Minimum required versions by the platform:
 
-**React Native - 0.60**
+**React Native - 0.70.3**
 
-**IOS - 9.00**
+**IOS - 10.00**
 
-**Android - API 19**
+**Android - API 21**
 
 If you are starting a new React Native project you can follow [environment setup guide](https://reactnative.dev/docs/environment-setup).
 Once the setup completed successfully, you can initialize a new project with CLI:
 
 ```shell
 $ npx react-native init AwesomeProject
+```
+
+[Here is the full example project](IdenfyNewProjectExample.zip), which integrates our SDK and is generated via CLI command:
+```shell
+$  npx react-native init IdenfyNewProjectExample --template react-native-template-typescript
 ```
 
 #### 2.2 Adding SDK dependency through npm
@@ -77,59 +82,92 @@ Add the following lines to the Podfile of your project:
 
 ```ruby
 post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
-          target.build_configurations.each do |config|
-            config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-        end
-      end
-    end
-end
+                      installer.pods_project.targets.each do |target|
+                        target.build_configurations.each do |config|
+                          config.build_settings['ENABLE_BITCODE'] = 'NO'
+                        end
+
+                        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+                          target.build_configurations.each do |config|
+                            config.build_settings['ENABLE_BITCODE'] = 'NO'
+                            config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+                            config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+                          end
+                        end
+                      end
+                      react_native_post_install(
+                                                installer,
+                                                # Set `mac_catalyst_enabled` to `true` in order to apply patches
+                                                # necessary for Mac Catalyst builds
+                                                :mac_catalyst_enabled => false
+                                                )
+                                                __apply_Xcode_12_5_M1_post_install_workaround(installer)
+                    end
 ```
 The Podfile **should look like** the one in the /example/ios/Podfile
 
-The main idea is to have **use_frameworks!** and **disabled Flipper** in the target Pod settings. It is required, because we use [dynamic (newer) Frameworks](https://stackoverflow.com/a/49469205/9163128) instead of static ones.
+The main idea is to have **use_native_modules!** and **disabled Flipper** in the target Pod settings. It is required, because we use [dynamic (newer) Frameworks](https://stackoverflow.com/a/49469205/9163128) instead of static ones.
 
 Take a look at a fresh projects' Podfile:
 ```ruby
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+platform :ios, '12.4'
+install! 'cocoapods', :deterministic_uuids => false
 
-target 'demo-idenfy' do
+target 'IdenfyReactNativeExample' do
+  use_frameworks! :linkage => :static
   config = use_native_modules!
-  use_frameworks!
+
+  # Flags change depending on the env values.
+  flags = get_default_flags()
 
   use_react_native!(
-    :path => config[:reactNativePath],
-    # to enable hermes on iOS, change `false` to `true` and then install pods
-    :hermes_enabled => false
-  )
+                    :path => config[:reactNativePath],
+                    # Hermes is now enabled by default. Disable by setting this flag to false.
+                    # Upcoming versions of React Native may rely on get_default_flags(), but
+                    # we make it explicit here to aid in the React Native upgrade process.
+                    :hermes_enabled => false,
+                    :fabric_enabled => flags[:fabric_enabled],
+                    # Enables Flipper.
+                    #
+                    # Note that if you have use_frameworks! enabled, Flipper will not work and
+                    # you should disable the next line.
+                    #     :flipper_configuration => FlipperConfiguration.enabled,
+                    # An absolute path to your application root.
+                    :app_path => "#{Pod::Config.instance.installation_root}/.."
+                    )
 
-  target 'demo-idenfyTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+                    target 'IdenfyReactNativeExampleTests' do
+                      inherit! :complete
+                      # Pods for testing
+                    end
 
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable the next line.
-  #use_flipper!()
+                    post_install do |installer|
+                      installer.pods_project.targets.each do |target|
+                        target.build_configurations.each do |config|
+                          config.build_settings['ENABLE_BITCODE'] = 'NO'
+                        end
 
-  post_install do |installer|
-   installer.pods_project.targets.each do |target|
-          if target.name == "ZIPFoundation" || target.name == "lottie-ios"
-            target.build_configurations.each do |config|
-              config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-          end
-        end
-      end
-    react_native_post_install(installer)
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
-  end
+                        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+                          target.build_configurations.each do |config|
+                            config.build_settings['ENABLE_BITCODE'] = 'NO'
+                            config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+                            config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+                          end
+                        end
+                      end
+                      react_native_post_install(
+                                                installer,
+                                                # Set `mac_catalyst_enabled` to `true` in order to apply patches
+                                                # necessary for Mac Catalyst builds
+                                                :mac_catalyst_enabled => false
+                                                )
+                                                __apply_Xcode_12_5_M1_post_install_workaround(installer)
+                    end
 end
+
 
 ```
 
@@ -148,9 +186,10 @@ After successful integration you should be able to call IdenfyReactNative.start 
 
 If project is not successfully compiled or runtime issues occurs, make sure you have followed the steps. For better understanding you may check at the sample app in this repository.
 
-Once you have an authentication token, which can be retried with following code, found in the example app, you can call IdenfyReactNative.start:
+Once you have an authentication token, which can be retried with following code, found in the example app, you can call start method (**you need to import it**):
 
 ```typescript jsx
+import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
 getAuthToken = () => {
   let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
   return fetch(BASE_URL + 'api/v2/token', {
@@ -194,8 +233,9 @@ Calling IdenfyReactNative.start with provided authToken:
 
 
 ```typescript jsx
+import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
  startSDK = (authToken: String) => {
-  IdenfyReactNative.start({
+  start({
     authToken: authToken,
   })
     .then((response) => {
@@ -214,9 +254,10 @@ Calling IdenfyReactNative.start with provided authToken:
 ```
 ## Callbacks
 
-Callback from the SDK can be retrieved from IdenfyReactNative.start promise:
+Callback from the SDK can be retrieved from start promise:
 ````typescript jsx
-IdenfyReactNative.start({
+import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
+start({
   authToken: authToken,
 })
   .then((response) => {
@@ -303,8 +344,9 @@ getAuthTokenForFaceReauth = () => {
 ```
 ### 2. Initializing the SDK
 ```typescript jsx
+import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
 startFaceReAuthSDK = (authToken: String) => {
-  IdenfyReactNative.startFaceReAuth({
+  startFaceReAuth({
     authToken: authToken,
   })
     .then((response) => {
@@ -364,23 +406,23 @@ IdenfyCommonColors.idenfyMainColorV2 = UIColor(hexString: idenfyColorMain)
 IdenfyCommonColors.idenfyMainDarkerColorV2 = UIColor(hexString: idenfyColorMain)
 IdenfyCommonColors.idenfyGradientColor1V2 = UIColor(hexString: idenfyColorButton)
 IdenfyCommonColors.idenfyGradientColor2V2 = UIColor(hexString: idenfyColorButton)
-            
+
 IdenfyToolbarUISettingsV2.idenfyDefaultToolbarBackgroundColor = UIColor(hexString: idenfyColorMain)
-            
+
 IdenfyToolbarUISettingsV2.idenfyDefaultToolbarBackIconTintColor = IdenfyCommonColors.idenfyBlack
 IdenfyToolbarUISettingsV2.idenfyDefaultToolbarLogoIconTintColor = IdenfyCommonColors.idenfyBlack
-            
+
 IdenfyToolbarUISettingsV2.idenfyLanguageSelectionToolbarLanguageSelectionIconTintColor  = IdenfyCommonColors.idenfyBlack
 IdenfyToolbarUISettingsV2.idenfyLanguageSelectionToolbarCloseIconTintColor = IdenfyCommonColors.idenfyBlack
-            
+
 IdenfyCommonColors.idenfyPhotoResultDetailsCardBackgroundColorV2 = UIColor(hexString: "#FFE5BD")
 IdenfyPhotoResultViewUISettingsV2.idenfyPhotoResultViewDetailsCardTitleColor = UIColor(hexString: idenfyColorButton)
-            
+
 let idenfyViewsV2:IdenfyViewsV2 = IdenfyViewsBuilderV2()
     .withCountryCellView(CountryCell.self)
     .build()
-                    
-            
+
+
 let idenfyController = IdenfyController.shared
 idenfyController.initializeIdenfySDKV2WithManual(idenfySettingsV2: idenfySettingsV2, idenfyViewsV2: idenfyViewsV2)
 ```

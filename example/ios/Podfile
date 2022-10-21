@@ -1,94 +1,57 @@
-platform :ios, '11.0'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-#def add_flipper_pods!
-#  version = '~> 0.33.1'
-#  pod 'FlipperKit', version, :configuration => 'Debug'
-#  pod 'FlipperKit/FlipperKitLayoutPlugin', version, :configuration => 'Debug'
-#  pod 'FlipperKit/SKIOSNetworkPlugin', version, :configuration => 'Debug'
-#  pod 'FlipperKit/FlipperKitUserDefaultsPlugin', version, :configuration => 'Debug'
-#  pod 'FlipperKit/FlipperKitReactPlugin', version, :configuration => 'Debug'
-#end
-## Post Install processing for Flipper
-#def flipper_post_install(installer)
-#  installer.pods_project.targets.each do |target|
-#    if target.name == 'YogaKit'
-#      target.build_configurations.each do |config|
-#        config.build_settings['SWIFT_VERSION'] = '4.1'
-#      end
-#    end
-#  end
-#end
+platform :ios, '12.4'
+install! 'cocoapods', :deterministic_uuids => false
 
 target 'IdenfyReactNativeExample' do
-  use_frameworks!
-  # Pods for TestExample
-  pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
-  pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
-  pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
-  pod 'RCTTypeSafety', :path => "../node_modules/react-native/Libraries/TypeSafety"
-  pod 'React', :path => '../node_modules/react-native/'
-  pod 'React-Core', :path => '../node_modules/react-native/'
-  pod 'React-CoreModules', :path => '../node_modules/react-native/React/CoreModules'
-  pod 'React-Core/DevSupport', :path => '../node_modules/react-native/'
-  pod 'React-RCTActionSheet', :path => '../node_modules/react-native/Libraries/ActionSheetIOS'
-  pod 'React-RCTAnimation', :path => '../node_modules/react-native/Libraries/NativeAnimation'
-  pod 'React-RCTBlob', :path => '../node_modules/react-native/Libraries/Blob'
-  pod 'React-RCTImage', :path => '../node_modules/react-native/Libraries/Image'
-  pod 'React-RCTLinking', :path => '../node_modules/react-native/Libraries/LinkingIOS'
-  pod 'React-RCTNetwork', :path => '../node_modules/react-native/Libraries/Network'
-  pod 'React-RCTSettings', :path => '../node_modules/react-native/Libraries/Settings'
-  pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text'
-  pod 'React-RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
-  pod 'React-Core/RCTWebSocket', :path => '../node_modules/react-native/'
-
-  pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
-  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
-  pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
-  pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
-  pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
-  pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
-  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
-
-  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-  pod 'idenfy-react-native-sdk', :path => '../..'
+  use_frameworks! :linkage => :static
+  config = use_native_modules!
   
-  use_native_modules!
-
-end
-
-post_install do |installer|
-      find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
-                       "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
-
-      find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
-        "RCTBridgeModuleNameForClass(module))", "RCTBridgeModuleNameForClass([module class]))")
-
-
-      find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
-      "RCTBridgeModuleNameForClass(strongModule))",
-      "RCTBridgeModuleNameForClass(Class(strongModule)))")
-    installer.pods_project.targets.each do |target|
-        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
-          target.build_configurations.each do |config|
-            config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-        end
-      end
-    end
-end
-
-def find_and_replace(dir, findstr, replacestr)
-  Dir[dir].each do |name|
-      text = File.read(name)
-      replace = text.gsub(findstr,replacestr)
-      if text != replace
-          puts "Fix: " + name
-          File.open(name, "w") { |file| file.puts replace }
-          STDOUT.flush
-      end
-  end
-  Dir[dir + '*/'].each(&method(:find_and_replace))
+  # Flags change depending on the env values.
+  flags = get_default_flags()
+  
+  use_react_native!(
+                    :path => config[:reactNativePath],
+                    # Hermes is now enabled by default. Disable by setting this flag to false.
+                    # Upcoming versions of React Native may rely on get_default_flags(), but
+                    # we make it explicit here to aid in the React Native upgrade process.
+                    :hermes_enabled => false,
+                    :fabric_enabled => flags[:fabric_enabled],
+                    # Enables Flipper.
+                    #
+                    # Note that if you have use_frameworks! enabled, Flipper will not work and
+                    # you should disable the next line.
+                    #     :flipper_configuration => FlipperConfiguration.enabled,
+                    # An absolute path to your application root.
+                    :app_path => "#{Pod::Config.instance.installation_root}/.."
+                    )
+                    
+                    target 'IdenfyReactNativeExampleTests' do
+                      inherit! :complete
+                      # Pods for testing
+                    end
+                    
+                    post_install do |installer|
+                      installer.pods_project.targets.each do |target|
+                        target.build_configurations.each do |config|
+                          config.build_settings['ENABLE_BITCODE'] = 'NO'
+                        end
+                        
+                        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+                          target.build_configurations.each do |config|
+                            config.build_settings['ENABLE_BITCODE'] = 'NO'
+                            config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+                            config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+                          end
+                        end
+                      end
+                      react_native_post_install(
+                                                installer,
+                                                # Set `mac_catalyst_enabled` to `true` in order to apply patches
+                                                # necessary for Mac Catalyst builds
+                                                :mac_catalyst_enabled => false
+                                                )
+                                                __apply_Xcode_12_5_M1_post_install_workaround(installer)
+                    end
 end
