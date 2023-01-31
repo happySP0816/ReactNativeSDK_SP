@@ -70,6 +70,30 @@ android {
   }
 }
 ```
+
+**Also starting version 2.0.2** you need add the following lines to your `android/app/build.gradle`:
+```gradle
+allprojects {
+    repositories {
+    ...
+        exclusiveContent {
+               // We get React Native's Android binaries exclusively through npm,
+               // from a local Maven repo inside node_modules/react-native/.
+               // (The use of exclusiveContent prevents looking elsewhere like Maven Central
+               // and potentially getting a wrong version.)
+               filter {
+                   includeGroup "com.facebook.react"
+               }
+               forRepository {
+                   maven {
+                       url "$rootDir/../node_modules/react-native/android"
+                   }
+               }
+        }
+    }
+}
+```
+
 #### 2.4 Configure IOS project
 
 `NSCameraUsageDescription' must be provided in the application's 'Info.plist' file:
