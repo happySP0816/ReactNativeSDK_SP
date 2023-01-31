@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { start, startFaceReAuth } from 'idenfy-react-native';
 import React, { Component } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { Buffer } from 'buffer';
 import { apiKey, apiSecret, BASE_URL, clientId, scanRef } from './Consts';
+import { start, startFaceReAuth } from 'idenfy-react-native';
 global.Buffer = Buffer; // very important
 export default class App extends Component {
   state = {
