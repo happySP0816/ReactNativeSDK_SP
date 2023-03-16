@@ -25,7 +25,7 @@ Minimum required versions by the platform:
 
 **React Native - 0.70.3**
 
-**IOS - 10.00**
+**IOS - 11.00**
 
 **Android - API 21**
 
