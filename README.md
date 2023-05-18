@@ -58,6 +58,7 @@ Add the maven link `android/build.gradle`:
 allprojects {
   repositories {
     maven { url 'https://jitpack.io' }
+    maven { url 'https://developer.huawei.com/repo/' }
   }
 }
 ```
@@ -111,7 +112,7 @@ post_install do |installer|
                           config.build_settings['ENABLE_BITCODE'] = 'NO'
                         end
 
-                        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+                        if target.name == "lottie-ios"
                           target.build_configurations.each do |config|
                             config.build_settings['ENABLE_BITCODE'] = 'NO'
                             config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
@@ -174,7 +175,7 @@ target 'IdenfyReactNativeExample' do
                           config.build_settings['ENABLE_BITCODE'] = 'NO'
                         end
 
-                        if target.name == "ZIPFoundation" || target.name == "lottie-ios"
+                        if target.name == "lottie-ios"
                           target.build_configurations.each do |config|
                             config.build_settings['ENABLE_BITCODE'] = 'NO'
                             config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
