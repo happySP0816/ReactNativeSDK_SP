@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.dependency "React-Core"
 
-  s.dependency "iDenfySDK-Static/iDenfyLiveness-Static", "7.9.0"
+  s.dependency "iDenfySDK-Static/iDenfyLiveness-Static", "7.9.1"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
   if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
