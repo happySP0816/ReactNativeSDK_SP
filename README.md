@@ -322,55 +322,127 @@ Information about the IdenfyIdentificationResult **manualIdentificationStatus** 
 The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
 For better customization we suggest using the [immediate redirect feature ](#customizing-results-callbacks-v2-optional). As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
 
-## Face Re-authentication
-To use the newest face re-authentication feature you need to have a **scanRef**. On how to obtain it as well as general information are available in our documentation.
-### 1. Obtaining token
-First step is to obtain the authentication token. Please use this util method
+## Face Authentication
+To use the newest face authentication feature you need to have a **scanRef**. On how to obtain it as well as general information are available in our documentation.
+### 1. Checking face authentication status
+
+Firsty, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
+
+| Name             | Description                                                                                                                                      |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ENROLLMENT`     | The user must perform an enrollment, since the identification was performed with an older face tec version (Before face authentication update)   |
+| `AUTHENTICATION` | The user can authenticate by face                                                                                                                |
+| `IDENTIFICATION` | The user must perform an identification
+
+ENROLLMENT only applies to ACTIVE_LIVENESS authentication method and from a user perspective is identical to AUTHENTICATION, although ENROLLMENT is basically registration for authentication - whichever face client used for enrollment, that face will then work for subsequent authentications.
+
+Enrollment is recommended to be used for these cases:
+1. Client was on-boarded using an old version of the SDK and therefore not registered for authentication.
+2. Client failed an automated liveliness check during on-boarding and therefore was not registered for authentication.
+3. Client is registered for authentication, but for whatever reason wishes to change the face used for authentication.
+
 ```typescript jsx
-getAuthTokenForFaceReauth = () => {
-  let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
-  return fetch(BASE_URL + 'partner/authentication-info', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + encodedAuth,
-    },
-    body: JSON.stringify({
-      scanRef: scanRef,
-    }),
-  })
-    .then((response) => {
-      console.log(response);
-      if (response.ok) {
-        response.json().then((json) => this.startFaceReAuthSDK(json.token));
-      } else {
-        response.json().then((json) => {
-          console.log(json);
-          this.setState({
-            message:
-              'Error getting authToken, status code is: ' +
-              response.status.toString() +
-              '\n \n Response: ' +
-              JSON.stringify(json),
-            sdkFlowComplete: true,
-          });
-        });
-      }
+  getFaceAuthTokenType = () => {
+    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+    return fetch(BASE_URL + 'identification/facial-auth/' + scanRef + '/check-status/?method=' + authenticationMethod, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + encodedAuth,
+      },
     })
-    .catch((error) => {
-      this.setState({
-        message: error.message,
-        sdkFlowComplete: true,
+      .then((response) => {
+        console.log(response);
+        if (response.ok) {
+          response.json().then((json) => {
+            switch(json.type) {
+              case 'AUTHENTICATION':
+                //The user can authenticate by face
+                this.getAuthTokenForFaceAuth(json.type);
+                break;
+                case 'ENROLLMENT':
+                  //The user must perform an enrollment, since the identification was performed with an older face tec version
+                  this.getAuthTokenForFaceAuth(json.type);
+                  break;
+              default:
+                 //The user must perform an identification
+                break;
+            }
+          });
+        } else {
+          response.json().then((json) => {
+            console.log(json);
+            this.setState({
+              message:
+                'Error getting authToken, status code is: ' +
+                response.status.toString() +
+                '\n \n Response: ' +
+                JSON.stringify(json),
+              sdkFlowComplete: true,
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          message: error.message,
+          sdkFlowComplete: true,
+        });
+        console.error(error);
       });
-      console.error(error);
-    });
-};
+  };
+```
+
+### 2. Obtaining token
+Next step is to obtain the authentication token. Please use this util method
+```typescript jsx
+  getAuthTokenForFaceAuth = (type: String) => {
+    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+    return fetch(BASE_URL + 'partner/authentication-info', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + encodedAuth,
+      },
+      body: JSON.stringify({
+        scanRef: scanRef,
+        type: type,
+        method: authenticationMethod
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.ok) {
+          response.json().then((json) => this.startFaceAuthSDK(json.token));
+        } else {
+          response.json().then((json) => {
+            console.log(json);
+            this.setState({
+              message:
+                'Error getting authToken, status code is: ' +
+                response.status.toString() +
+                '\n \n Response: ' +
+                JSON.stringify(json),
+              sdkFlowComplete: true,
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          message: error.message,
+          sdkFlowComplete: true,
+        });
+        console.error(error);
+      });
+  };
 ```
 ### 2. Initializing the SDK
 ```typescript jsx
 import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
-startFaceReAuthSDK = (authToken: String) => {
+startFaceAuthSDK = (authToken: String) => {
   startFaceReAuth({
     authToken: authToken,
   })
@@ -389,7 +461,7 @@ startFaceReAuthSDK = (authToken: String) => {
 };
 ```
 ### 3. Receiving results
-After Face re-authentication is completed the SDK closes and returns response using SDK callbacks as well as webhook results.
+After Face authentication is completed the SDK closes and returns response using SDK callbacks as well as webhook results.
 
 Callback is returned from **startFaceReAuth** method.
 
@@ -397,9 +469,9 @@ The possible values and their explanations are:
 
 | Name       |Description
 |------------|------------------------------------
-| `SUCCESS`  |The user completed a face reauthentication flow and the reauthentication status, provided by the platform, is SUCCESS.
-| `FAILED`   |The user completed a face reauthentication flow and the reauthentication status, provided by the platform, is FAILED.
-| `EXIT`     |The user did not complete a face reauthentication flow and the reauthentication status, provided by the platform, is EXIT.
+| `SUCCESS`  |The user completed a face authentication flow and the authentication status, provided by the platform, is SUCCESS.
+| `FAILED`   |The user completed a face authentication flow and the authentication status, provided by the platform, is FAILED.
+| `EXIT`     |The user did not complete a face authentication flow and the authentication status, provided by the platform, is EXIT.
 
 ## To initialize you can check the utils method in the example project
 
