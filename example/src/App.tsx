@@ -11,6 +11,8 @@ import {
   authenticationMethod,
 } from './Consts';
 import { start, startFaceReAuth } from 'idenfy-react-native';
+import { IdenfyFaceAuthUIBuilder } from './IdenfyFaceAuthUIBuilder';
+
 global.Buffer = Buffer; // very important
 export default class App extends Component {
   state = {
@@ -122,9 +124,17 @@ export default class App extends Component {
         console.error(error);
       });
   };
+
   startFaceAuthSDK = (authToken: String) => {
+    let idenfyFaceAuthUISettings = new IdenfyFaceAuthUIBuilder()
+      .withLanguageSelection(true)
+      .withOnBoardingView(true)
+      .build();
+
     startFaceReAuth({
       authToken: authToken,
+      withImmediateRedirect: false,
+      idenfyFaceAuthUISettings: idenfyFaceAuthUISettings,
     })
       .then((response) => {
         this.setState({

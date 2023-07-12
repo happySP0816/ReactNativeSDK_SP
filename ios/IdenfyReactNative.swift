@@ -63,9 +63,11 @@ class IdenfyReactNative: NSObject {
                                rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             let authToken = GetSdkConfig.getAuthToken(config: config)
+            let immediateRedirect = GetSdkConfig.getImmediateRedirectFromConfig(config: config)
+            let idenfyFaceAuthUISettings = GetSdkConfig.getFaceAuthSettingsFromConfig(config: config)
             
             let idenfyController = IdenfyController.shared
-            let faceReauthenticationInitialization = FaceAuthenticationInitialization(authenticationToken: authToken, withImmediateRedirect: false)
+            let faceReauthenticationInitialization = FaceAuthenticationInitialization(authenticationToken: authToken, withImmediateRedirect: immediateRedirect, idenfyFaceAuthUISettings: idenfyFaceAuthUISettings)
             idenfyController.initializeFaceAuthentication(faceAuthenticationInitialization: faceReauthenticationInitialization)
             
             let idenfyVC = idenfyController.instantiateNavigationController()

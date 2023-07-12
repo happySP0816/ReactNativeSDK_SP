@@ -1,4 +1,5 @@
 ## Table of contents
+
 - [Getting started](#getting-started)
   - [1. Obtaining an authentication token](#1-obtaining-an-authentication-token)
   - [2. Adding Idenfy React Native SDK](#2-adding-idenfy-react-native-sdk)
@@ -6,11 +7,11 @@
     - [2.2 Adding SDK dependency through npm](#22-adding-sdk-dependency-through-npm)
     - [2.3 Configure Android project](#23-configure-android-project)
     - [2.4 Configure IOS project](#24-configure-ios-project)
-*   [Usage](#usage)
-*   [Callbacks](#callbacks)
-*   [Additional customization](#additional-customization)
-*   [SDK Integration tutorials](#sdk-integration-tutorials)
 
+* [Usage](#usage)
+* [Callbacks](#callbacks)
+* [Additional customization](#additional-customization)
+* [SDK Integration tutorials](#sdk-integration-tutorials)
 
 ## Getting started
 
@@ -19,8 +20,11 @@ The @idenfy/react-native-sdk SDK tool is an official React Native plugin, which 
 ### 1. Obtaining an authentication token
 
 The SDK requires token for starting initialization. [Token generation guide](https://github.com/idenfy/Documentation/blob/master/pages/GeneratingIdentificationToken.md)
+
 ### 2. Adding Idenfy React Native SDK
+
 #### 2.1 Availability information & new project setup
+
 Minimum required versions by the platform:
 
 **React Native - 0.70.3**
@@ -37,6 +41,7 @@ $ npx react-native init AwesomeProject
 ```
 
 [Here is the full example project](IdenfyNewProjectExample.zip), which integrates our SDK and is generated via CLI command:
+
 ```shell
 $  npx react-native init IdenfyNewProjectExample --template react-native-template-typescript
 ```
@@ -53,7 +58,9 @@ $ npm install @idenfy/react-native-sdk --save
 #### 2.3 Configure Android project
 
 ##### Manually update build files without the script
+
 Add the maven link `android/build.gradle`:
+
 ```gradle
 allprojects {
   repositories {
@@ -64,6 +71,7 @@ allprojects {
 ```
 
 Enable multidex in `android/app/build.gradle`:
+
 ```gradle
 android {
   defaultConfig {
@@ -73,6 +81,7 @@ android {
 ```
 
 **Also starting version 2.0.2** you need add the following lines to your `android/app/build.gradle`:
+
 ```gradle
 allprojects {
     repositories {
@@ -98,6 +107,7 @@ allprojects {
 #### 2.4 Configure IOS project
 
 `NSCameraUsageDescription' must be provided in the application's 'Info.plist' file:
+
 ```xml
 <key>NSCameraUsageDescription</key>
 <string>Required for document and facial capture</string>
@@ -129,11 +139,13 @@ post_install do |installer|
                                                 __apply_Xcode_12_5_M1_post_install_workaround(installer)
                     end
 ```
+
 The Podfile **should look like** the one in the /example/ios/Podfile
 
 The main idea is to have **use_native_modules!** and **disabled Flipper** in the target Pod settings. It is required, because we use [dynamic (newer) Frameworks](https://stackoverflow.com/a/49469205/9163128) instead of static ones.
 
 Take a look at a fresh projects' Podfile:
+
 ```ruby
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
@@ -196,8 +208,8 @@ end
 
 ```
 
-
 Install the pods (run **pod update** as well):
+
 ```bash
 cd ios
 pod install
@@ -254,12 +266,12 @@ getAuthToken = () => {
     });
 };
 ```
-Calling IdenfyReactNative.start with provided authToken:
 
+Calling IdenfyReactNative.start with provided authToken:
 
 ```typescript jsx
 import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
- startSDK = (authToken: String) => {
+startSDK = (authToken: String) => {
   start({
     authToken: authToken,
   })
@@ -277,21 +289,23 @@ import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
     });
 };
 ```
+
 ## Callbacks
 
 Callback from the SDK can be retrieved from start promise:
-````typescript jsx
+
+```typescript jsx
 import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
 start({
   authToken: authToken,
-})
-  .then((response) => {
-    this.setState({
-      message: JSON.stringify(response),
-      sdkFlowComplete: true,
-    });
-  })
-````
+}).then((response) => {
+  this.setState({
+    message: JSON.stringify(response),
+    sdkFlowComplete: true,
+  });
+});
+```
+
 Result will have a following JSON structure:
 
 ```javascript
@@ -303,143 +317,157 @@ Result will have a following JSON structure:
 
 Information about the IdenfyIdentificationResult **autoIdentificationStatus** statuses:
 
-|Name            |Description
-|-------------------|------------------------------------
-|`APPROVED`   |The user completed an identification flow and the identification status, provided by an automated platform, is APPROVED.
-|`FAILED`|The user completed an identification flow and the identification status, provided by an automated platform, is FAILED.
-|`UNVERIFIED`   |The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED.
+| Name         | Description                                                                                                                       |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `APPROVED`   | The user completed an identification flow and the identification status, provided by an automated platform, is APPROVED.          |
+| `FAILED`     | The user completed an identification flow and the identification status, provided by an automated platform, is FAILED.            |
+| `UNVERIFIED` | The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED. |
 
 Information about the IdenfyIdentificationResult **manualIdentificationStatus** statuses:
 
-|Name            |Description
-|-------------------|------------------------------------
-|`APPROVED`   |The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is APPROVED.
-|`FAILED`|The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is FAILED.
-|`WAITING`|The user completed an identification flow and started waiting for the manual verification results in the iDenfy SDK. Then he/she decided to stop waiting and pressed a "BACK TO ACCOUNT" button. The manual identification review is **still ongoing**.
-|`INACTIVE`   |The user was only verified by an automated platform, not by a manual reviewer. The identification performed by the user can still be verified by the manual review if your system uses the manual verification service.
+| Name       | Description                                                                                                                                                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `APPROVED` | The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is APPROVED.                                           |
+| `FAILED`   | The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is FAILED.                                             |
+| `WAITING`  | The user completed an identification flow and started waiting for the manual verification results in the iDenfy SDK. Then he/she decided to stop waiting and pressed a "BACK TO ACCOUNT" button. The manual identification review is **still ongoing**. |
+| `INACTIVE` | The user was only verified by an automated platform, not by a manual reviewer. The identification performed by the user can still be verified by the manual review if your system uses the manual verification service.                                 |
 
-*Note
+\*Note
 The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
 For better customization we suggest using the [immediate redirect feature ](#customizing-results-callbacks-v2-optional). As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
 
 ## Face Authentication
+
 To use the newest face authentication feature you need to have a **scanRef**. On how to obtain it as well as general information are available in our documentation.
+
 ### 1. Checking face authentication status
 
 Firsty, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
 
-| Name             | Description                                                                                                                                      |
-|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ENROLLMENT`     | The user must perform an enrollment, since the identification was performed with an older face tec version (Before face authentication update)   |
-| `AUTHENTICATION` | The user can authenticate by face                                                                                                                |
-| `IDENTIFICATION` | The user must perform an identification
+| Name             | Description                                                                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ENROLLMENT`     | The user must perform an enrollment, since the identification was performed with an older face tec version (Before face authentication update) |
+| `AUTHENTICATION` | The user can authenticate by face                                                                                                              |
+| `IDENTIFICATION` | The user must perform an identification                                                                                                        |
 
 ENROLLMENT only applies to ACTIVE_LIVENESS authentication method and from a user perspective is identical to AUTHENTICATION, although ENROLLMENT is basically registration for authentication - whichever face client used for enrollment, that face will then work for subsequent authentications.
 
 Enrollment is recommended to be used for these cases:
+
 1. Client was on-boarded using an old version of the SDK and therefore not registered for authentication.
 2. Client failed an automated liveliness check during on-boarding and therefore was not registered for authentication.
 3. Client is registered for authentication, but for whatever reason wishes to change the face used for authentication.
 
 ```typescript jsx
-  getFaceAuthTokenType = () => {
-    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
-    return fetch(BASE_URL + 'identification/facial-auth/' + scanRef + '/check-status/?method=' + authenticationMethod, {
+getFaceAuthTokenType = () => {
+  let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+  return fetch(
+    BASE_URL +
+      'identification/facial-auth/' +
+      scanRef +
+      '/check-status/?method=' +
+      authenticationMethod,
+    {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Basic ' + encodedAuth,
       },
-    })
-      .then((response) => {
-        console.log(response);
-        if (response.ok) {
-          response.json().then((json) => {
-            switch(json.type) {
-              case 'AUTHENTICATION':
-                //The user can authenticate by face
-                this.getAuthTokenForFaceAuth(json.type);
-                break;
-                case 'ENROLLMENT':
-                  //The user must perform an enrollment, since the identification was performed with an older face tec version
-                  this.getAuthTokenForFaceAuth(json.type);
-                  break;
-              default:
-                 //The user must perform an identification
-                break;
-            }
-          });
-        } else {
-          response.json().then((json) => {
-            console.log(json);
-            this.setState({
-              message:
-                'Error getting authToken, status code is: ' +
-                response.status.toString() +
-                '\n \n Response: ' +
-                JSON.stringify(json),
-              sdkFlowComplete: true,
-            });
-          });
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          message: error.message,
-          sdkFlowComplete: true,
+    }
+  )
+    .then((response) => {
+      console.log(response);
+      if (response.ok) {
+        response.json().then((json) => {
+          switch (json.type) {
+            case 'AUTHENTICATION':
+              //The user can authenticate by face
+              this.getAuthTokenForFaceAuth(json.type);
+              break;
+            case 'ENROLLMENT':
+              //The user must perform an enrollment, since the identification was performed with an older face tec version
+              this.getAuthTokenForFaceAuth(json.type);
+              break;
+            default:
+              //The user must perform an identification
+              break;
+          }
         });
-        console.error(error);
+      } else {
+        response.json().then((json) => {
+          console.log(json);
+          this.setState({
+            message:
+              'Error getting authToken, status code is: ' +
+              response.status.toString() +
+              '\n \n Response: ' +
+              JSON.stringify(json),
+            sdkFlowComplete: true,
+          });
+        });
+      }
+    })
+    .catch((error) => {
+      this.setState({
+        message: error.message,
+        sdkFlowComplete: true,
       });
-  };
+      console.error(error);
+    });
+};
 ```
 
 ### 2. Obtaining token
+
 Next step is to obtain the authentication token. Please use this util method
+
 ```typescript jsx
-  getAuthTokenForFaceAuth = (type: String) => {
-    let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
-    return fetch(BASE_URL + 'partner/authentication-info', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + encodedAuth,
-      },
-      body: JSON.stringify({
-        scanRef: scanRef,
-        type: type,
-        method: authenticationMethod
-      }),
-    })
-      .then((response) => {
-        console.log(response);
-        if (response.ok) {
-          response.json().then((json) => this.startFaceAuthSDK(json.token));
-        } else {
-          response.json().then((json) => {
-            console.log(json);
-            this.setState({
-              message:
-                'Error getting authToken, status code is: ' +
-                response.status.toString() +
-                '\n \n Response: ' +
-                JSON.stringify(json),
-              sdkFlowComplete: true,
-            });
+getAuthTokenForFaceAuth = (type: String) => {
+  let encodedAuth = new Buffer(apiKey + ':' + apiSecret).toString('base64');
+  return fetch(BASE_URL + 'partner/authentication-info', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + encodedAuth,
+    },
+    body: JSON.stringify({
+      scanRef: scanRef,
+      type: type,
+      method: authenticationMethod,
+    }),
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.ok) {
+        response.json().then((json) => this.startFaceAuthSDK(json.token));
+      } else {
+        response.json().then((json) => {
+          console.log(json);
+          this.setState({
+            message:
+              'Error getting authToken, status code is: ' +
+              response.status.toString() +
+              '\n \n Response: ' +
+              JSON.stringify(json),
+            sdkFlowComplete: true,
           });
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          message: error.message,
-          sdkFlowComplete: true,
         });
-        console.error(error);
+      }
+    })
+    .catch((error) => {
+      this.setState({
+        message: error.message,
+        sdkFlowComplete: true,
       });
-  };
+      console.error(error);
+    });
+};
 ```
+
 ### 2. Initializing the SDK
+
 ```typescript jsx
 import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
 startFaceAuthSDK = (authToken: String) => {
@@ -460,22 +488,50 @@ startFaceAuthSDK = (authToken: String) => {
     });
 };
 ```
+
+An additional bool can be passed to the function to set the immediate redirect feature.
+This sets whether the results from iDenfy SDK should be received immediately without any additional result pages
+
+```typescript jsx
+startFaceReAuth({
+  authToken: authToken,
+  withImmediateRedirect: false,
+});
+```
+
+Face authentication UI settings class can be passed to modify the face authentication flow:
+
+```typescript jsx
+let idenfyFaceAuthUISettings = new IdenfyFaceAuthUIBuilder()
+  .withLanguageSelection(true)
+  .withOnBoardingView(true)
+  .build();
+
+startFaceReAuth({
+  authToken: authToken,
+  withImmediateRedirect: false,
+  idenfyFaceAuthUISettings: idenfyFaceAuthUISettings,
+});
+```
+
 ### 3. Receiving results
+
 After Face authentication is completed the SDK closes and returns response using SDK callbacks as well as webhook results.
 
 Callback is returned from **startFaceReAuth** method.
 
 The possible values and their explanations are:
 
-| Name       |Description
-|------------|------------------------------------
-| `SUCCESS`  |The user completed a face authentication flow and the authentication status, provided by the platform, is SUCCESS.
-| `FAILED`   |The user completed a face authentication flow and the authentication status, provided by the platform, is FAILED.
-| `EXIT`     |The user did not complete a face authentication flow and the authentication status, provided by the platform, is EXIT.
+| Name      | Description                                                                                                            |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `SUCCESS` | The user completed a face authentication flow and the authentication status, provided by the platform, is SUCCESS.     |
+| `FAILED`  | The user completed a face authentication flow and the authentication status, provided by the platform, is FAILED.      |
+| `EXIT`    | The user did not complete a face authentication flow and the authentication status, provided by the platform, is EXIT. |
 
 ## To initialize you can check the utils method in the example project
 
 ## Additional customization
+
 Currently, @idenfy/react-native-sdk plugin does not provide customization options via React Native code directly. For any additional SDK customization you should edit native code inside of the plugin.
 
 **Android customization:**
@@ -487,14 +543,15 @@ Follow [IOS native SDK guide](https://github.com/idenfy/Documentation/blob/maste
 A detailed guide on how to provide complex customization:
 
 ### 1. Fork this repository
-First, fork this repository because you will reference it directly via Github in your package.json.
 
+First, fork this repository because you will reference it directly via Github in your package.json.
 
 ### 2. Apply customization where needed
 
 Most of the native customization for IOS are done via code changes. For Android, it is not needed most of the time.
 
 Take a look at the IOS changes in [this file](https://github.com/idenfy/ReactNativeSDK/blob/ui-customization-v1/ios/IdenfyReactNative.swift) in the SDK with custom UI:
+
 ```Swift
 let idenfyColorMain = "#EA9619"
 let idenfyColorButton = "#6539AC"
@@ -552,16 +609,9 @@ After dragging don't forget to link the folder in the project settings, see atta
 Changes will be present, and it will be easy to keep up with the SDK changes, by using Git fork.
 
 ### 6. Check IOS example
+
 **If needed check the customization example with all folders in a right structure. Here is a [project](IdenfyCustomizationExample.zip)**.
 
 ## SDK Integration tutorials
+
 For more information visit [SDK integration tutorials](https://github.com/idenfy/Documentation/blob/master/pages/tutorials/mobile-sdk-tutorials.md).
-
-
-
-
-
-
-
-
-
