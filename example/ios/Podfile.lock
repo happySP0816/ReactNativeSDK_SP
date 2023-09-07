@@ -1,6 +1,6 @@
 PODS:
   - boost (1.76.0)
-  - BVLinearGradient (2.7.3):
+  - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.70.3)
@@ -13,10 +13,10 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.70.3)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - idenfy-react-native (2.2.2):
-    - iDenfySDK-Static/iDenfyLiveness-Static (= 8.1.0)
+  - idenfy-react-native (2.2.3):
+    - iDenfySDK-Static/iDenfyLiveness-Static (= 8.1.7)
     - React-Core
-  - iDenfySDK-Static/iDenfyLiveness-Static (8.1.0):
+  - iDenfySDK-Static/iDenfyLiveness-Static (8.1.7):
     - lottie-ios (= 4.2.0)
   - lottie-ios (4.2.0)
   - RCT-Folly (2021.07.22.00):
@@ -303,7 +303,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - idenfy-react-native (from `../node_modules/idenfy-react-native`)
+  - idenfy-react-native (from `../..`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -353,7 +353,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   idenfy-react-native:
-    :path: "../node_modules/idenfy-react-native"
+    :path: "../.."
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -411,14 +411,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
-  BVLinearGradient: fbe308a1d19a8133f69e033abc85d8008644f5e3
+  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 3b313c3fb52b597f7a9b430798e6367d2b9f07e5
   FBReactNativeSpec: 99a7ecb7e9665d96f2fea706b0844e2f3117f381
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  idenfy-react-native: ca4317ac800d24aae6f2e55b19166a646d51ec0a
-  iDenfySDK-Static: 1ad6e3978176131f47dfdd6b3ee67f4079b62f4d
+  idenfy-react-native: d2f38b34dc3837edd91113d7a5d2e11e28e74d53
+  iDenfySDK-Static: 9bc69fc07b1eaed6f47b2498b39ef03371f2a3e5
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: 5cf7e7d2f12699724b59f90350257a422eaa9492
@@ -448,6 +448,6 @@ SPEC CHECKSUMS:
   ReactCommon: 01064177e66d652192c661de899b1076da962fd9
   Yoga: 2ed968a4f060a92834227c036279f2736de0fce3
 
-PODFILE CHECKSUM: 599c03a1f01556b6eab073bc7cfcb1500d4bcfbd
+PODFILE CHECKSUM: 1bcf44806d2e24eea2e5cfdd7be496a7f4de2a31
 
 COCOAPODS: 1.12.1
