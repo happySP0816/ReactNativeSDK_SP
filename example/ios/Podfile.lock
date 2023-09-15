@@ -13,10 +13,10 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.70.3)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - idenfy-react-native (2.2.3):
-    - iDenfySDK-Static/iDenfyLiveness-Static (= 8.1.7)
+  - idenfy-react-native (2.2.4):
+    - iDenfySDK-Static/iDenfyLiveness-Static (= 8.1.9)
     - React-Core
-  - iDenfySDK-Static/iDenfyLiveness-Static (8.1.7):
+  - iDenfySDK-Static/iDenfyLiveness-Static (8.1.9):
     - lottie-ios (= 4.2.0)
   - lottie-ios (4.2.0)
   - RCT-Folly (2021.07.22.00):
@@ -417,8 +417,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 99a7ecb7e9665d96f2fea706b0844e2f3117f381
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  idenfy-react-native: d2f38b34dc3837edd91113d7a5d2e11e28e74d53
-  iDenfySDK-Static: 9bc69fc07b1eaed6f47b2498b39ef03371f2a3e5
+  idenfy-react-native: b089f94dab69a3a544a7388b34c8df42dc8571b8
+  iDenfySDK-Static: f36fa415f9270bc011a06c17f104ca1c3f6d308d
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: 5cf7e7d2f12699724b59f90350257a422eaa9492
