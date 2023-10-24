@@ -31,7 +31,7 @@ Minimum required versions by the platform:
 
 **IOS - 12.00**
 
-**Android - API 21**
+**Android - API 24**
 
 If you are starting a new React Native project you can follow [environment setup guide](https://reactnative.dev/docs/environment-setup).
 Once the setup completed successfully, you can initialize a new project with CLI:
