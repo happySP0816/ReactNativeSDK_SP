@@ -19,7 +19,7 @@ The @idenfy/react-native-sdk SDK tool is an official React Native plugin, which 
 
 ### 1. Obtaining an authentication token
 
-The SDK requires token for starting initialization. [Token generation guide](https://github.com/idenfy/Documentation/blob/master/pages/GeneratingIdentificationToken.md)
+The SDK requires token for starting initialization. [Token generation guide](https://documentation.idenfy.com/API/GeneratingIdentificationToken)
 
 ### 2. Adding Idenfy React Native SDK
 
@@ -535,10 +535,10 @@ The possible values and their explanations are:
 Currently, @idenfy/react-native-sdk plugin does not provide customization options via React Native code directly. For any additional SDK customization you should edit native code inside of the plugin.
 
 **Android customization:**
-Follow [Android native SDK](https://github.com/idenfy/Documentation/blob/master/pages/ANDROID-SDK.md#customizing-sdk-v2-optional) guide and edit **IdenfyReactNativeModule.kt**.
+Follow [Android native SDK](https://documentation.idenfy.com/mobile/Android/android-sdk#customizing-sdk-flow-optional) guide and edit **IdenfyReactNativeModule.kt**.
 
 **IOS customization:**
-Follow [IOS native SDK guide](https://github.com/idenfy/Documentation/blob/master/pages/ios-sdk.md#customizing-sdk-v2-optional) and edit **IdenfyReactNative.swift**.
+Follow [IOS native SDK guide](https://documentation.idenfy.com/mobile/iOS/ios-sdk#customizing-sdk-flow-optional) and edit **IdenfyReactNative.swift**.
 
 A detailed guide on how to provide complex customization:
 
@@ -611,7 +611,3 @@ Changes will be present, and it will be easy to keep up with the SDK changes, by
 ### 6. Check IOS example
 
 **If needed check the customization example with all folders in a right structure. Here is a [project](IdenfyCustomizationExample.zip)**.
-
-## SDK Integration tutorials
-
-For more information visit [SDK integration tutorials](https://github.com/idenfy/Documentation/blob/master/pages/tutorials/mobile-sdk-tutorials.md).

@@ -13,7 +13,7 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.70.3)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - idenfy-react-native (2.3.1):
+  - idenfy-react-native (2.3.2):
     - iDenfySDK-Static/iDenfyLiveness-Static (= 8.2.3)
     - React-Core
   - iDenfySDK-Static/iDenfyLiveness-Static (8.2.3):
@@ -417,7 +417,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 99a7ecb7e9665d96f2fea706b0844e2f3117f381
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  idenfy-react-native: 7bd9d291b90e19a2652d0840ae96d68f532b530e
+  idenfy-react-native: 11933ba0f0f60f84170a0df0d49f063f3a07d5d1
   iDenfySDK-Static: 948061e37580c635e9135fa548931e36cf11738d
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
