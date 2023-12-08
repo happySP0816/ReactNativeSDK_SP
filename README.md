@@ -342,7 +342,7 @@ To use the newest face authentication feature you need to have a **scanRef**. On
 
 ### 1. Checking face authentication status
 
-Firsty, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
+Firstly, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
 
 | Name             | Description                             |
 | ---------------- | --------------------------------------- |
