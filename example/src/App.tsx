@@ -51,10 +51,6 @@ export default class App extends Component {
                 //The user can authenticate by face
                 this.getAuthTokenForFaceAuth(json.type);
                 break;
-              case 'ENROLLMENT':
-                //The user must perform an enrollment, since the identification was performed with an older face tec version
-                this.getAuthTokenForFaceAuth(json.type);
-                break;
               default:
                 //The user must perform an identification
                 break;

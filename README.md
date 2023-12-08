@@ -344,19 +344,10 @@ To use the newest face authentication feature you need to have a **scanRef**. On
 
 Firsty, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
 
-| Name             | Description                                                                                                                                    |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ENROLLMENT`     | The user must perform an enrollment, since the identification was performed with an older face tec version (Before face authentication update) |
-| `AUTHENTICATION` | The user can authenticate by face                                                                                                              |
-| `IDENTIFICATION` | The user must perform an identification                                                                                                        |
-
-ENROLLMENT only applies to ACTIVE_LIVENESS authentication method and from a user perspective is identical to AUTHENTICATION, although ENROLLMENT is basically registration for authentication - whichever face client used for enrollment, that face will then work for subsequent authentications.
-
-Enrollment is recommended to be used for these cases:
-
-1. Client was on-boarded using an old version of the SDK and therefore not registered for authentication.
-2. Client failed an automated liveliness check during on-boarding and therefore was not registered for authentication.
-3. Client is registered for authentication, but for whatever reason wishes to change the face used for authentication.
+| Name             | Description                             |
+| ---------------- | --------------------------------------- |
+| `AUTHENTICATION` | The user can authenticate by face       |
+| `IDENTIFICATION` | The user must perform an identification |
 
 ```typescript jsx
 getFaceAuthTokenType = () => {
@@ -383,10 +374,6 @@ getFaceAuthTokenType = () => {
           switch (json.type) {
             case 'AUTHENTICATION':
               //The user can authenticate by face
-              this.getAuthTokenForFaceAuth(json.type);
-              break;
-            case 'ENROLLMENT':
-              //The user must perform an enrollment, since the identification was performed with an older face tec version
               this.getAuthTokenForFaceAuth(json.type);
               break;
             default:
