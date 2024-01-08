@@ -13,10 +13,10 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.70.3)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - idenfy-react-native (2.3.2):
-    - iDenfySDK-Static/iDenfyLiveness-Static (= 8.2.3)
+  - idenfy-react-native (2.3.3):
+    - iDenfySDK-Static/iDenfyLiveness-Static (= 8.3.0)
     - React-Core
-  - iDenfySDK-Static/iDenfyLiveness-Static (8.2.3):
+  - iDenfySDK-Static/iDenfyLiveness-Static (8.3.0):
     - lottie-ios (= 4.2.0)
   - lottie-ios (4.2.0)
   - RCT-Folly (2021.07.22.00):
@@ -410,15 +410,15 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: a7c83b31436843459a1961bfd74b96033dc77234
+  boost: 9fa78656d705f55b1220151d997e57e2a3f2cde0
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 3b313c3fb52b597f7a9b430798e6367d2b9f07e5
   FBReactNativeSpec: 99a7ecb7e9665d96f2fea706b0844e2f3117f381
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  idenfy-react-native: 11933ba0f0f60f84170a0df0d49f063f3a07d5d1
-  iDenfySDK-Static: 948061e37580c635e9135fa548931e36cf11738d
+  idenfy-react-native: a0389668e95b804a791b9adfaac3a84f87b33005
+  iDenfySDK-Static: fc935205f663d425a35c778f577a7cef9a364abb
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: 5cf7e7d2f12699724b59f90350257a422eaa9492
