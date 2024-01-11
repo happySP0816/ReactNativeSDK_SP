@@ -27,7 +27,7 @@ The SDK requires token for starting initialization. [Token generation guide](htt
 
 Minimum required versions by the platform:
 
-**React Native - 0.70.3**
+**React Native - 0.72.7**
 
 **IOS - 12.00**
 
@@ -80,30 +80,6 @@ android {
 }
 ```
 
-**Also starting version 2.0.2** you need add the following lines to your `android/app/build.gradle`:
-
-```gradle
-allprojects {
-    repositories {
-    ...
-        exclusiveContent {
-               // We get React Native's Android binaries exclusively through npm,
-               // from a local Maven repo inside node_modules/react-native/.
-               // (The use of exclusiveContent prevents looking elsewhere like Maven Central
-               // and potentially getting a wrong version.)
-               filter {
-                   includeGroup "com.facebook.react"
-               }
-               forRepository {
-                   maven {
-                       url "$rootDir/../node_modules/react-native/android"
-                   }
-               }
-        }
-    }
-}
-```
-
 #### 2.4 Configure IOS project
 
 `NSCameraUsageDescription' must be provided in the application's 'Info.plist' file:
@@ -130,10 +106,10 @@ post_install do |installer|
                           end
                         end
                       end
+                      # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
                       react_native_post_install(
                                                 installer,
-                                                # Set `mac_catalyst_enabled` to `true` in order to apply patches
-                                                # necessary for Mac Catalyst builds
+                                                config[:reactNativePath],
                                                 :mac_catalyst_enabled => false
                                                 )
                                                 __apply_Xcode_12_5_M1_post_install_workaround(installer)
@@ -146,12 +122,30 @@ The main idea is to have **use_native_modules!** and **disabled Flipper** in the
 
 Take a look at a fresh projects' Podfile:
 
-```ruby
-require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-
+````ruby
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
 platform :ios, '12.4'
-install! 'cocoapods', :deterministic_uuids => false
+prepare_react_native_project!
+# If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
+# because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
+#
+# To fix this you can also exclude `react-native-flipper` using a `react-native.config.js`
+# ```js
+# module.exports = {
+#   dependencies: {
+#     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
+# ```
+flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
 
 target 'IdenfyReactNativeExample' do
   use_frameworks! :linkage => :static
@@ -165,13 +159,13 @@ target 'IdenfyReactNativeExample' do
                     # Hermes is now enabled by default. Disable by setting this flag to false.
                     # Upcoming versions of React Native may rely on get_default_flags(), but
                     # we make it explicit here to aid in the React Native upgrade process.
-                    :hermes_enabled => false,
+                    :hermes_enabled => flags[:hermes_enabled],
                     :fabric_enabled => flags[:fabric_enabled],
                     # Enables Flipper.
                     #
                     # Note that if you have use_frameworks! enabled, Flipper will not work and
                     # you should disable the next line.
-                    #     :flipper_configuration => FlipperConfiguration.enabled,
+                    #     :flipper_configuration => flipper_config,
                     # An absolute path to your application root.
                     :app_path => "#{Pod::Config.instance.installation_root}/.."
                     )
@@ -185,6 +179,7 @@ target 'IdenfyReactNativeExample' do
                       installer.pods_project.targets.each do |target|
                         target.build_configurations.each do |config|
                           config.build_settings['ENABLE_BITCODE'] = 'NO'
+                          config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = '12.4'
                         end
 
                         if target.name == "lottie-ios"
@@ -195,18 +190,16 @@ target 'IdenfyReactNativeExample' do
                           end
                         end
                       end
+                      # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
                       react_native_post_install(
                                                 installer,
-                                                # Set `mac_catalyst_enabled` to `true` in order to apply patches
-                                                # necessary for Mac Catalyst builds
+                                                config[:reactNativePath],
                                                 :mac_catalyst_enabled => false
                                                 )
                                                 __apply_Xcode_12_5_M1_post_install_workaround(installer)
                     end
 end
-
-
-```
+````
 
 Install the pods (run **pod update** as well):
 
