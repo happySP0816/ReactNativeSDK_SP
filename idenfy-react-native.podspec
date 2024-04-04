@@ -11,14 +11,14 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "12.0" }
+  s.platforms    = { :ios => "13.4" }
   s.source       = { :git => "https://github.com/idenfy/ReactNativeSDK/idenfy-react-native.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
 
-  s.dependency "iDenfySDK-Static/iDenfyLiveness-Static", "8.4.0"
+  s.dependency "iDenfySDK-Static/iDenfyLiveness-Static", "8.4.1"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
   if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
