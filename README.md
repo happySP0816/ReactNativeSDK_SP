@@ -27,9 +27,9 @@ The SDK requires token for starting initialization. [Token generation guide](htt
 
 Minimum required versions by the platform:
 
-**React Native - 0.72.7**
+**React Native - 0.73.6**
 
-**IOS - 12.00**
+**IOS - 13.4**
 
 **Android - API 24**
 
@@ -129,7 +129,7 @@ require Pod::Executable.execute_command('node', ['-p',
     "react-native/scripts/react_native_pods.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
-platform :ios, '12.4'
+platform :ios, '13.4'
 prepare_react_native_project!
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -151,16 +151,8 @@ target 'IdenfyReactNativeExample' do
   use_frameworks! :linkage => :static
   config = use_native_modules!
 
-  # Flags change depending on the env values.
-  flags = get_default_flags()
-
   use_react_native!(
                     :path => config[:reactNativePath],
-                    # Hermes is now enabled by default. Disable by setting this flag to false.
-                    # Upcoming versions of React Native may rely on get_default_flags(), but
-                    # we make it explicit here to aid in the React Native upgrade process.
-                    :hermes_enabled => flags[:hermes_enabled],
-                    :fabric_enabled => flags[:fabric_enabled],
                     # Enables Flipper.
                     #
                     # Note that if you have use_frameworks! enabled, Flipper will not work and
@@ -196,7 +188,6 @@ target 'IdenfyReactNativeExample' do
                                                 config[:reactNativePath],
                                                 :mac_catalyst_enabled => false
                                                 )
-                                                __apply_Xcode_12_5_M1_post_install_workaround(installer)
                     end
 end
 ````
