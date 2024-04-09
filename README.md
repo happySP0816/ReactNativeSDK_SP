@@ -31,6 +31,8 @@ Minimum required versions by the platform:
 
 **IOS - 13.4**
 
+**iOS SDK is built using xCode 15.3**
+
 **Android - API 24**
 
 If you are starting a new React Native project you can follow [environment setup guide](https://reactnative.dev/docs/environment-setup).
@@ -103,6 +105,7 @@ post_install do |installer|
                             config.build_settings['ENABLE_BITCODE'] = 'NO'
                             config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
                             config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+                            config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = '12.4'
                           end
                         end
                       end
@@ -171,7 +174,6 @@ target 'IdenfyReactNativeExample' do
                       installer.pods_project.targets.each do |target|
                         target.build_configurations.each do |config|
                           config.build_settings['ENABLE_BITCODE'] = 'NO'
-                          config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = '12.4'
                         end
 
                         if target.name == "lottie-ios"
@@ -179,6 +181,7 @@ target 'IdenfyReactNativeExample' do
                             config.build_settings['ENABLE_BITCODE'] = 'NO'
                             config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
                             config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+                            config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = '12.4'
                           end
                         end
                       end
