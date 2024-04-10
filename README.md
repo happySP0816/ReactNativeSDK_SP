@@ -121,7 +121,7 @@ post_install do |installer|
 
 The Podfile **should look like** the one in the /example/ios/Podfile
 
-The main idea is to have **use_native_modules!** and **disabled Flipper** in the target Pod settings. It is required, because we use [dynamic (newer) Frameworks](https://stackoverflow.com/a/49469205/9163128) instead of static ones.
+The main idea is to have **use_native_modules!**, **static linkage** and flipper **disabled** in the target Pod settings.
 
 Take a look at a fresh projects' Podfile:
 
