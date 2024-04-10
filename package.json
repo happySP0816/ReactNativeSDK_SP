@@ -1,6 +1,6 @@
 {
   "name": "@idenfy/react-native-sdk",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "iDenfy ReactNative SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -81,11 +81,9 @@
     "react-test-renderer": "18.2.0",
     "typescript": "5.0.4"
   },
-
   "engines": {
     "node": ">=18"
   },
-
   "resolutions": {
     "@types/react": "17.0.21"
   },
