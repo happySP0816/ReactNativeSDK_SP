@@ -1,6 +1,6 @@
 {
   "name": "@idenfy/react-native-sdk",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "iDenfy ReactNative SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
