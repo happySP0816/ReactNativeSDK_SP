@@ -139,7 +139,7 @@ dependencies {
     //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.github.idenfy:sdk-api:8.4.1'
+  implementation 'com.github.idenfy:sdk-api:8.4.2'
    implementation 'androidx.multidex:multidex:2.0.1'
 // From node_modules
 }
