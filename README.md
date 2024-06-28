@@ -31,7 +31,7 @@ Minimum required versions by the platform:
 
 **IOS - 13.4**
 
-**iOS SDK is built using xCode 15.3**
+**iOS SDK is built using xCode 15.4**
 
 **Android - API 24**
 
