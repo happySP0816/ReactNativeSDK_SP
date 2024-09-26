@@ -1,6 +1,6 @@
 {
   "name": "@idenfy/react-native-sdk",
-  "version": "2.4.9",
+  "version": "2.5.1",
   "description": "iDenfy ReactNative SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "0.73.6"
+    "react-native": "0.73.9"
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.7",
@@ -84,6 +84,7 @@
   "engines": {
     "node": ">=18"
   },
+  "packageManager": "yarn@3.6.4",
   "resolutions": {
     "@types/react": "17.0.21"
   },
