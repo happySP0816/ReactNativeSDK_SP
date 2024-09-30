@@ -1,3 +1,5 @@
+## This is an official React Native plugin, which provides an easier integration of iDenfy KYC services. This plugin offers [identity verification](#identity-verification-flow-usage) and [face authentication](#face-authentication-flow-usage) flows
+
 ## Table of contents
 
 - [Getting started](#getting-started)
@@ -9,13 +11,15 @@
     - [2.4 Configure IOS project](#24-configure-ios-project)
 
 * [Usage](#usage)
+  - [Identity verification usage](#identity-verification-flow-usage)
+  - [Face authentication usage](#face-authentication-flow-usage)
 * [Callbacks](#callbacks)
+  - [Identity verification callbacks](#identity-verification-flow-callbacks)
+  - [Face authentication callbakcs](#face-authentication-flow-callbacks)
 * [Additional customization](#additional-customization)
 * [SDK Integration tutorials](#sdk-integration-tutorials)
 
 ## Getting started
-
-The @idenfy/react-native-sdk SDK tool is an official React Native plugin, which provides an easier integration of iDenfy KYC services.
 
 ### 1. Obtaining an authentication token
 
@@ -80,6 +84,16 @@ android {
      multiDexEnabled true
   }
 }
+```
+
+##### Proguard rules
+
+If you use code obfuscation for Android with a proguard-rules.pro file. You should update it with [ours](https://github.com/idenfy/iDenfyResources/blob/main/sdk/android/Proguard/proguard-rules.pro), otherwise some unexpected behaviour might occur.
+
+Also, since AGP 8.0 enables R8 full mode by default, make sure you have disabled R8 full mode in the **gradle.properties** file:
+
+```gradle
+android.enableR8.fullMode=false
 ```
 
 #### 2.4 Configure IOS project
@@ -206,6 +220,8 @@ cd ..
 
 ## Usage
 
+#### Identity verification flow usage
+
 After successful integration you should be able to call IdenfyReactNative.start method.
 
 If project is not successfully compiled or runtime issues occurs, make sure you have followed the steps. For better understanding you may check at the sample app in this repository.
@@ -277,53 +293,7 @@ startSDK = (authToken: String) => {
 };
 ```
 
-## Callbacks
-
-Callback from the SDK can be retrieved from start promise:
-
-```typescript jsx
-import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
-start({
-  authToken: authToken,
-}).then((response) => {
-  this.setState({
-    message: JSON.stringify(response),
-    sdkFlowComplete: true,
-  });
-});
-```
-
-Result will have a following JSON structure:
-
-```javascript
-{
-  "autoIdentificationStatus": "APPROVED",
-    "manualIdentificationStatus": "APPROVED"
-}
-```
-
-Information about the IdenfyIdentificationResult **autoIdentificationStatus** statuses:
-
-| Name         | Description                                                                                                                       |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| `APPROVED`   | The user completed an identification flow and the identification status, provided by an automated platform, is APPROVED.          |
-| `FAILED`     | The user completed an identification flow and the identification status, provided by an automated platform, is FAILED.            |
-| `UNVERIFIED` | The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED. |
-
-Information about the IdenfyIdentificationResult **manualIdentificationStatus** statuses:
-
-| Name       | Description                                                                                                                                                                                                                                             |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `APPROVED` | The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is APPROVED.                                           |
-| `FAILED`   | The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is FAILED.                                             |
-| `WAITING`  | The user completed an identification flow and started waiting for the manual verification results in the iDenfy SDK. Then he/she decided to stop waiting and pressed a "BACK TO ACCOUNT" button. The manual identification review is **still ongoing**. |
-| `INACTIVE` | The user was only verified by an automated platform, not by a manual reviewer. The identification performed by the user can still be verified by the manual review if your system uses the manual verification service.                                 |
-
-\*Note
-The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
-For better customization we suggest using the immediate redirect feature. As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
-
-## Face Authentication
+## Face Authentication flow usage
 
 To use the newest face authentication feature you need to have a **scanRef**. On how to obtain it as well as general information are available in our documentation.
 
@@ -440,7 +410,7 @@ getAuthTokenForFaceAuth = (type: String) => {
 };
 ```
 
-### 2. Initializing the SDK
+### 3. Initializing the SDK
 
 ```typescript jsx
 import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
@@ -488,11 +458,79 @@ startFaceReAuth({
 });
 ```
 
-### 3. Receiving results
+## Callbacks
+
+#### Identity verification flow callbacks
+
+Callback from the SDK can be retrieved from start promise:
+
+```typescript jsx
+import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
+start({
+  authToken: authToken,
+}).then((response) => {
+  this.setState({
+    message: JSON.stringify(response),
+    sdkFlowComplete: true,
+  });
+});
+```
+
+Result will have a following JSON structure:
+
+```javascript
+{
+  "autoIdentificationStatus": "APPROVED",
+    "manualIdentificationStatus": "APPROVED"
+}
+```
+
+Information about the IdenfyIdentificationResult **autoIdentificationStatus** statuses:
+
+| Name         | Description                                                                                                                       |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `APPROVED`   | The user completed an identification flow and the identification status, provided by an automated platform, is APPROVED.          |
+| `FAILED`     | The user completed an identification flow and the identification status, provided by an automated platform, is FAILED.            |
+| `UNVERIFIED` | The user did not complete an identification flow and the identification status, provided by an automated platform, is UNVERIFIED. |
+
+Information about the IdenfyIdentificationResult **manualIdentificationStatus** statuses:
+
+| Name       | Description                                                                                                                                                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `APPROVED` | The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is APPROVED.                                           |
+| `FAILED`   | The user completed an identification flow and was verified manually while waiting for the manual verification results in the iDenfy SDK. The identification status, provided by a manual review, is FAILED.                                             |
+| `WAITING`  | The user completed an identification flow and started waiting for the manual verification results in the iDenfy SDK. Then he/she decided to stop waiting and pressed a "BACK TO ACCOUNT" button. The manual identification review is **still ongoing**. |
+| `INACTIVE` | The user was only verified by an automated platform, not by a manual reviewer. The identification performed by the user can still be verified by the manual review if your system uses the manual verification service.                                 |
+
+\*Note
+The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
+For better customization we suggest using the immediate redirect feature. As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
+
+#### Face authentication flow callbacks
 
 After Face authentication is completed the SDK closes and returns response using SDK callbacks as well as webhook results.
 
-Callback is returned from **startFaceReAuth** method.
+Callback from the SDK can be retrieved from **startFaceReAuth** promise:
+
+```typescript jsx
+import { start, startFaceReAuth } from '@idenfy/react-native-sdk';
+startFaceReAuth({
+  authToken: authToken,
+}).then((response) => {
+  this.setState({
+    message: JSON.stringify(response),
+    sdkFlowComplete: true,
+  });
+});
+```
+
+Result will have a following JSON structure:
+
+```javascript
+{
+  "faceAuthenticationStatus": "SUCCESS"
+}
+```
 
 The possible values and their explanations are:
 
@@ -501,8 +539,6 @@ The possible values and their explanations are:
 | `SUCCESS` | The user completed a face authentication flow and the authentication status, provided by the platform, is SUCCESS.     |
 | `FAILED`  | The user completed a face authentication flow and the authentication status, provided by the platform, is FAILED.      |
 | `EXIT`    | The user did not complete a face authentication flow and the authentication status, provided by the platform, is EXIT. |
-
-## To initialize you can check the utils method in the example project
 
 ## Additional customization
 
