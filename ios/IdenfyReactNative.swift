@@ -20,7 +20,7 @@ class IdenfyReactNative: NSObject {
         }
     }
     
-    private func run(withConfig config: NSDictionary,
+  @MainActor private func run(withConfig config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
                      rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
@@ -58,7 +58,7 @@ class IdenfyReactNative: NSObject {
         })
     }
     
-    private func runFaceReauth(withConfig config: NSDictionary,
+  @MainActor private func runFaceReauth(withConfig config: NSDictionary,
                                resolver resolve: @escaping RCTPromiseResolveBlock,
                                rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
